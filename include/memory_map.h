@@ -25,7 +25,7 @@
 #define IO_OBP0 gb.mem[0xFF48]
 #define IO_OBP1 gb.mem[0xFF49]
 #define IO_WY gb.mem[0xFF4A]
-#define IO_WX gb.mem[0xFF48]
+#define IO_WX gb.mem[0xFF4B]
 
 #define IO_IE gb.mem[0xFFFF]
 
