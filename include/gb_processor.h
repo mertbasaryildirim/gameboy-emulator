@@ -17,46 +17,24 @@ typedef struct
 {
     union
     {
-#if defined(GB_HOST_LITTLE_ENDIAN)
-
+#if GB_HOST_LITTLE_ENDIAN
         struct
         {
-            uint8_t f;
-            uint8_t a;
-
-            uint8_t c;
-            uint8_t b;
-
-            uint8_t e;
-            uint8_t d;
-
-            uint8_t l;
-            uint8_t h;
-
-            uint8_t spl;
-            uint8_t sph;
+            uint8_t f, a; // AF low, high
+            uint8_t c, b; // BC low, high
+            uint8_t e, d; // DE low, high
+            uint8_t l, h; // HL low, high
+            uint8_t spl, sph;
         } r8;
-
-#elif defined(GB_HOST_BIG_ENDIAN)
-
+#elif GB_HOST_BIG_ENDIAN
         struct
         {
-            uint8_t a;
-            uint8_t f;
-
-            uint8_t b;
-            uint8_t c;
-
-            uint8_t d;
-            uint8_t e;
-
-            uint8_t h;
-            uint8_t l;
-
-            uint8_t sph;
-            uint8_t spl;
+            uint8_t a, f; // AF high, low
+            uint8_t b, c; // BC high, low
+            uint8_t d, e; // DE high, low
+            uint8_t h, l; // HL high, low
+            uint8_t sph, spl;
         } r8;
-
 #endif
 
         struct

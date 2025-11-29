@@ -26,4 +26,17 @@ void OP_0b00000000(void);
  */
 void OP_0b00xx0001(void);
 
+/*
+ * 0b00000010 / 0x02: LD (BC),A
+ *
+ * Stores the value of register A into the memory location addressed by BC.
+ *
+ * The instruction implementation interprets the 16-bit value in BC as an
+ * absolute memory address and writes the contents of A to that address using
+ * the memory interface. The opcode fetch and PC increment are handled by the
+ * dispatcher, so this implementation only performs the write and accounts for
+ * timing by adding 2 machine cycles to gb_proc.cycles.
+ */
+void OP_0b00000010(void);
+
 #endif
