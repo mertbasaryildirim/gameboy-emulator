@@ -40,3 +40,40 @@ void OP_0b00xx0011(void)
 
     gb_proc.cycles += 2;
 }
+
+void OP_0b00xxx100(void)
+{
+    uint8_t r_index = (gb_proc.opcode >> 3) & 0x7u;
+
+    uint8_t *targets[8] = {
+        &gb_proc.registers.r8.b,
+        &gb_proc.registers.r8.c,
+        &gb_proc.registers.r8.d,
+        &gb_proc.registers.r8.e,
+        &gb_proc.registers.r8.h,
+        &gb_proc.registers.r8.l,
+        NULL,
+        &gb_proc.registers.r8.a};
+
+    uint8_t *reg = targets[r_index];
+    if (!reg)
+        return;
+
+    uint8_t value = *reg;
+    uint8_t result = (uint8_t)(value + 1);
+
+    if (result == 0)
+        GB_FLAG_SET(GB_FLAG_Z);
+    else
+        GB_FLAG_CLEAR(GB_FLAG_Z);
+
+    GB_FLAG_CLEAR(GB_FLAG_N);
+
+    if ((value & 0x0F) == 0x0F)
+        GB_FLAG_SET(GB_FLAG_H);
+    else
+        GB_FLAG_CLEAR(GB_FLAG_H);
+
+    *reg = result;
+    gb_proc.cycles += 1;
+}

@@ -39,4 +39,14 @@ void OP_0b00000010(void);
  */
 void OP_0b00xx0011(void);
 
+/*
+ * 0b00xxx100: INC r
+ *
+ * Increments the 8-bit register r by 1, where the bits xxx in the opcode
+ * select one of B, C, D, E, H, L, or A (the (HL) memory form is handled
+ * separately). Z is set if the result is zero, H is set on carry from bit 3,
+ * N is cleared, and C is left unchanged. Duration: 1 machine cycle.
+ */
+void OP_0b00xxx100(void);
+
 #endif
