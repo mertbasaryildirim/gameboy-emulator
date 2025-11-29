@@ -20,3 +20,13 @@ void OP_0b00xx0001(void)
 
     gb_proc.cycles += 3;
 }
+
+void OP_0b00000010(void)
+{
+    uint16_t addr = gb_proc.registers.r16.bc;
+    uint8_t data = gb_proc.registers.r8.a;
+
+    mem_write(addr, data);
+
+    gb_proc.cycles += 2;
+}
