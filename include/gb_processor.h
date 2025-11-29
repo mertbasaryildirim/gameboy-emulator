@@ -3,6 +3,17 @@
 
 #include <stdint.h>
 
+/* Flag bit masks (F register) */
+#define GB_FLAG_Z 0x80u
+#define GB_FLAG_N 0x40u
+#define GB_FLAG_H 0x20u
+#define GB_FLAG_C 0x10u
+
+/* Flag helper macros */
+#define GB_FLAG_SET(mask) (gb_proc.registers.r8.f |= (uint8_t)(mask))
+#define GB_FLAG_CLEAR(mask) (gb_proc.registers.r8.f &= (uint8_t)~(mask))
+#define GB_FLAG_IS_SET(mask) ((gb_proc.registers.r8.f & (uint8_t)(mask)) != 0)
+
 typedef struct
 {
     union
