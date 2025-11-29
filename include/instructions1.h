@@ -49,4 +49,15 @@ void OP_0b00xx0011(void);
  */
 void OP_0b00xxx100(void);
 
+/*
+ * 0b00xxx101: DEC r
+ *
+ * Decrements the 8-bit register r by 1, where the bits xxx in the opcode
+ * select one of B, C, D, E, H, L, or A (the (HL) memory form is handled
+ * separately). Z is set if the result is zero, H is set when a borrow
+ * occurs from bit 4 (low nibble transitions from 0x0 to 0xF), N is set,
+ * and C is left unchanged. Duration: 1 machine cycle.
+ */
+void OP_0b00xxx101(void);
+
 #endif
