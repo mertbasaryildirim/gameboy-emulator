@@ -60,4 +60,13 @@ void OP_0b00xxx100(void);
  */
 void OP_0b00xxx101(void);
 
+/*
+ * 0b00xxx110: LD r,n
+ *
+ * Loads the 8-bit immediate value n into register r, where the bits xxx in
+ * the opcode select one of B, C, D, E, H, L, or A (the (HL) form is handled
+ * separately). Flags are not affected. Duration: 2 machine cycles.
+ */
+void OP_0b00xxx110(void);
+
 #endif
