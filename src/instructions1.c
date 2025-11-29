@@ -2,6 +2,16 @@
 #include "gb_processor.h"
 #include "gb_memory.h"
 
+static uint8_t *const reg8_table[8] = {
+    &gb_proc.registers.r8.b,
+    &gb_proc.registers.r8.c,
+    &gb_proc.registers.r8.d,
+    &gb_proc.registers.r8.e,
+    &gb_proc.registers.r8.h,
+    &gb_proc.registers.r8.l,
+    NULL,
+    &gb_proc.registers.r8.a};
+
 void OP_0b00000000(void)
 {
     gb_proc.cycles += 1;
@@ -44,18 +54,7 @@ void OP_0b00xx0011(void)
 void OP_0b00xxx100(void)
 {
     uint8_t r_index = (gb_proc.opcode >> 3) & 0x7u;
-
-    uint8_t *targets[8] = {
-        &gb_proc.registers.r8.b,
-        &gb_proc.registers.r8.c,
-        &gb_proc.registers.r8.d,
-        &gb_proc.registers.r8.e,
-        &gb_proc.registers.r8.h,
-        &gb_proc.registers.r8.l,
-        NULL,
-        &gb_proc.registers.r8.a};
-
-    uint8_t *reg = targets[r_index];
+    uint8_t *reg = reg8_table[r_index];
     if (!reg)
         return;
 
@@ -81,18 +80,7 @@ void OP_0b00xxx100(void)
 void OP_0b00xxx101(void)
 {
     uint8_t r_index = (gb_proc.opcode >> 3) & 0x7u;
-
-    uint8_t *targets[8] = {
-        &gb_proc.registers.r8.b,
-        &gb_proc.registers.r8.c,
-        &gb_proc.registers.r8.d,
-        &gb_proc.registers.r8.e,
-        &gb_proc.registers.r8.h,
-        &gb_proc.registers.r8.l,
-        NULL,
-        &gb_proc.registers.r8.a};
-
-    uint8_t *reg = targets[r_index];
+    uint8_t *reg = reg8_table[r_index];
     if (!reg)
         return;
 
@@ -118,18 +106,7 @@ void OP_0b00xxx101(void)
 void OP_0b00xxx110(void)
 {
     uint8_t r_index = (gb_proc.opcode >> 3) & 0x7u;
-
-    uint8_t *targets[8] = {
-        &gb_proc.registers.r8.b,
-        &gb_proc.registers.r8.c,
-        &gb_proc.registers.r8.d,
-        &gb_proc.registers.r8.e,
-        &gb_proc.registers.r8.h,
-        &gb_proc.registers.r8.l,
-        NULL,
-        &gb_proc.registers.r8.a};
-
-    uint8_t *reg = targets[r_index];
+    uint8_t *reg = reg8_table[r_index];
     if (!reg)
         return;
 
