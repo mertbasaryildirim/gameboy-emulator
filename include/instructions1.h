@@ -69,4 +69,14 @@ void OP_0b00xxx101(void);
  */
 void OP_0b00xxx110(void);
 
+/*
+ * 0b00000111 / 0x07: RLCA
+ *
+ * Rotates the A register left by one bit in a circular manner. Bit 7 is
+ * copied into both bit 0 and the carry flag. Z is cleared, N is cleared,
+ * H is cleared, and C is set to the previous value of bit 7. Duration:
+ * 1 machine cycle.
+ */
+void OP_0b00000111(void);
+
 #endif

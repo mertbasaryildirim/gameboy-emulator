@@ -115,3 +115,18 @@ void OP_0b00xxx110(void)
 
     gb_proc.cycles += 2;
 }
+
+void OP_0b00000111(void)
+{
+    uint8_t a = gb_proc.registers.r8.a;
+    uint8_t bit7 = (a & 0x80u) ? 1u : 0u;
+    uint8_t res = (uint8_t)((a << 1) | bit7);
+
+    gb_proc.registers.r8.a = res;
+
+    GB_FLAG_CLEAR(GB_FLAG_Z | GB_FLAG_N | GB_FLAG_H | GB_FLAG_C);
+    if (bit7)
+        GB_FLAG_SET(GB_FLAG_C);
+
+    gb_proc.cycles += 1;
+}
