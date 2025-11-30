@@ -180,3 +180,13 @@ void OP_0b00001010(void)
 
     gb_proc.cycles += 2;
 }
+
+void OP_0b00xx1011(void)
+{
+    uint8_t xx = (gb_proc.opcode >> 4) & 0x3u;
+
+    uint16_t *rr_base = &gb_proc.registers.r16.bc;
+    rr_base[xx] -= 1;
+
+    gb_proc.cycles += 2;
+}
