@@ -147,4 +147,15 @@ void OP_0b00010000(void);
  */
 void OP_0b00010010(void);
 
+/* 0b00010111 / 0x17: RLA
+ *
+ * Rotates the A register left by one bit through the carry flag.
+ *
+ * Bit 7 of A is moved into the carry flag, and the previous value of the
+ * carry flag is shifted into bit 0 of A. Z is cleared, N is cleared, H is
+ * cleared, and C is set to the previous value of bit 7. Duration: 1 machine
+ * cycle.
+ */
+void OP_0b00010111(void);
+
 #endif
