@@ -227,4 +227,12 @@ void OP_0b00100010(void);
  */
 void OP_0b00100111(void);
 
+/*
+ * 0b00101010 / 0x2A: LD A,(HL+)
+ *
+ * Loads the 8-bit value from memory at the address held in HL into register A,
+ * then increments HL. Flags are not affected. Duration: 2 machine cycles.
+ */
+void OP_0b00101010(void);
+
 #endif
