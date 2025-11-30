@@ -137,4 +137,14 @@ void OP_0b00001111(void);
  */
 void OP_0b00010000(void);
 
+/*
+ * 0b00010010 / 0x12: LD (DE),A
+ *
+ * Stores the value of register A into the memory location addressed by DE.
+ * The 16-bit value in DE is treated as an absolute address, and the current
+ * contents of A are written to that location in memory. Flags are not
+ * affected. Duration: 2 machine cycles.
+ */
+void OP_0b00010010(void);
+
 #endif

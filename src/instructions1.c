@@ -214,3 +214,13 @@ void OP_0b00010000(void)
     gb_proc.stopped = 1;
     gb_proc.cycles += 1;
 }
+
+void OP_0b00010010(void)
+{
+    uint16_t addr = gb_proc.registers.r16.de;
+    uint8_t data = gb_proc.registers.r8.a;
+
+    mem_write(addr, data);
+
+    gb_proc.cycles += 2;
+}
