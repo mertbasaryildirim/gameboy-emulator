@@ -107,4 +107,13 @@ void OP_0b00xx1001(void);
  */
 void OP_0b00001010(void);
 
+/*
+ * 0b00xx1011: DEC rr
+ *
+ * Decrements the 16-bit register pair rr by 1, where the bits xx in the
+ * opcode select one of BC, DE, HL, or SP. This instruction does not modify
+ * any flag bits. Duration: 2 machine cycles.
+ */
+void OP_0b00xx1011(void);
+
 #endif
