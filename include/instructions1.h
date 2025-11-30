@@ -251,4 +251,13 @@ void OP_0b00101111(void);
  */
 void OP_0b00110010(void);
 
+/*
+ * 0b00110110 / 0x36: LD (HL),n
+ *
+ * Loads the 8-bit immediate value n into the memory location addressed by HL.
+ * The HL register pair itself is not modified and no flags are affected.
+ * Duration: 3 machine cycles.
+ */
+void OP_0b00110110(void);
+
 #endif
