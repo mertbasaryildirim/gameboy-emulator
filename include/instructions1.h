@@ -175,4 +175,16 @@ void OP_0b00011000(void);
  */
 void OP_0b00011010(void);
 
+/*
+ * 0b00011111 / 0x1F: RRA
+ *
+ * Rotates the A register right by one bit through the carry flag.
+ *
+ * Bit 0 of A is moved into the carry flag, and the previous value of the
+ * carry flag is shifted into bit 7 of A. Z is cleared, N is cleared, H is
+ * cleared, and C is set to the previous value of bit 0. Duration:
+ * 1 machine cycle.
+ */
+void OP_0b00011111(void);
+
 #endif
