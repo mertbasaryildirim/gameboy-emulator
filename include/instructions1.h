@@ -260,4 +260,12 @@ void OP_0b00110010(void);
  */
 void OP_0b00110110(void);
 
+/*
+ * 0b00110111 / 0x37: SCF
+ *
+ * Sets the carry flag and clears the N and H flags. The Z flag is left
+ * unchanged. Duration: 1 machine cycle.
+ */
+void OP_0b00110111(void);
+
 #endif
