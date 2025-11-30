@@ -214,4 +214,17 @@ void OP_0b001xx000(void);
  */
 void OP_0b00100010(void);
 
+/*
+ * 0b00100111 / 0x27: DAA
+ *
+ * Decimal-adjusts register A after a previous BCD add or subtract.
+ * Uses the N, H and C flags from the prior operation to decide how
+ * much to correct A by, so that it becomes a valid packed BCD value.
+ *
+ * After execution A holds the adjusted result; Z is set if A is zero,
+ * H is cleared, and C may be updated to reflect a carry out of the
+ * high decimal digit.
+ */
+void OP_0b00100111(void);
+
 #endif
