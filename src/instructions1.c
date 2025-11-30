@@ -273,3 +273,39 @@ void OP_0b00011111(void)
 
     gb_proc.cycles += 1;
 }
+
+void OP_0b001xx000(void)
+{
+    uint8_t cc = (gb_proc.opcode >> 3) & 0x3u;
+
+    int8_t e = (int8_t)mem_read(++gb_proc.pc);
+    uint8_t z = GB_FLAG_IS_SET(GB_FLAG_Z);
+    uint8_t c = GB_FLAG_IS_SET(GB_FLAG_C);
+
+    uint8_t take;
+    switch (cc)
+    {
+    case 0: /* NZ */
+        take = !z;
+        break;
+    case 1: /* Z */
+        take = z;
+        break;
+    case 2: /* NC */
+        take = !c;
+        break;
+    default: /* 3: C */
+        take = c;
+        break;
+    }
+
+    if (take)
+    {
+        gb_proc.pc = (uint16_t)(gb_proc.pc + (int16_t)e);
+        gb_proc.cycles += 3;
+    }
+    else
+    {
+        gb_proc.cycles += 2;
+    }
+}
