@@ -391,3 +391,11 @@ void OP_0b00110010(void)
 
     gb_proc.cycles += 2;
 }
+
+void OP_0b00110110(void)
+{
+    uint8_t n = mem_read(++gb_proc.pc);
+    mem_write(gb_proc.registers.r16.hl, n);
+
+    gb_proc.cycles += 3;
+}
