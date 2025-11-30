@@ -130,3 +130,17 @@ void OP_0b00000111(void)
 
     gb_proc.cycles += 1;
 }
+
+void OP_0b00001000(void)
+{
+    uint8_t nn_l = mem_read(++gb_proc.pc);
+    uint8_t nn_h = mem_read(++gb_proc.pc);
+    uint16_t nn = (uint16_t)nn_l | ((uint16_t)nn_h << 8);
+
+    uint16_t sp = gb_proc.registers.r16.sp;
+
+    mem_write(nn, (uint8_t)(sp & 0x00FF));
+    mem_write(nn + 1, (uint8_t)(sp >> 8));
+
+    gb_proc.cycles += 5;
+}
