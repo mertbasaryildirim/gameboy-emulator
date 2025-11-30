@@ -99,4 +99,12 @@ void OP_0b00001000(void);
  */
 void OP_0b00xx1001(void);
 
+/*
+ * 0b00001010 / 0x0A: LD A,(BC)
+ *
+ * Loads the 8-bit value from memory at the address held in the BC register
+ * pair into register A. Flags are not affected. Duration: 2 machine cycles.
+ */
+void OP_0b00001010(void);
+
 #endif
