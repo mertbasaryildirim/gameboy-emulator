@@ -79,4 +79,14 @@ void OP_0b00xxx110(void);
  */
 void OP_0b00000111(void);
 
+/*
+ * 0b00001000 / 0x08: LD (nn),SP
+ *
+ * Stores the current value of the stack pointer (SP) into two consecutive
+ * memory locations starting at the 16-bit immediate address nn. The low
+ * byte of SP is written to nn, and the high byte of SP is written to nn+1.
+ * Flags are not affected. Duration: 5 machine cycles.
+ */
+void OP_0b00001000(void);
+
 #endif
