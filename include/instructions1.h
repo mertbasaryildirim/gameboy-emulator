@@ -127,4 +127,14 @@ void OP_0b00xx1011(void);
  */
 void OP_0b00001111(void);
 
+/*
+ * 0b00010000 / 0x10: STOP
+ *
+ * Enters very low-power stop mode. The main CPU stops executing instructions,
+ * but internal state (registers, flags, IME, etc.) is left unchanged. The
+ * second byte of the instruction is fetched and ignored so that the program
+ * counter advances by 2 bytes in total.
+ */
+void OP_0b00010000(void);
+
 #endif
