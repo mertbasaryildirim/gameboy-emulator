@@ -89,4 +89,14 @@ void OP_0b00000111(void);
  */
 void OP_0b00001000(void);
 
+/*
+ * 0b00xx1001: ADD HL,rr
+ *
+ * Adds the 16-bit register pair rr to HL, where the bits xx in the opcode
+ * select one of BC, DE, HL, or SP, and stores the result back in HL.
+ * Z is unaffected, N is cleared, H is set if there is a carry from bit 11,
+ * and C is set if there is a carry from bit 15. Duration: 2 machine cycles.
+ */
+void OP_0b00xx1001(void);
+
 #endif

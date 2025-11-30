@@ -144,3 +144,31 @@ void OP_0b00001000(void)
 
     gb_proc.cycles += 5;
 }
+
+void OP_0b00xx1001(void)
+{
+    uint8_t xx = (gb_proc.opcode >> 4) & 0x3u;
+
+    uint16_t *rr_base = &gb_proc.registers.r16.bc;
+    uint16_t rr = rr_base[xx];
+    uint16_t hl = gb_proc.registers.r16.hl;
+
+    uint32_t result32 = (uint32_t)hl + (uint32_t)rr;
+    uint16_t result16 = (uint16_t)result32;
+
+    GB_FLAG_CLEAR(GB_FLAG_N);
+
+    if (((hl & 0x0FFFu) + (rr & 0x0FFFu)) & 0x1000u)
+        GB_FLAG_SET(GB_FLAG_H);
+    else
+        GB_FLAG_CLEAR(GB_FLAG_H);
+
+    if (result32 & 0x10000u)
+        GB_FLAG_SET(GB_FLAG_C);
+    else
+        GB_FLAG_CLEAR(GB_FLAG_C);
+
+    gb_proc.registers.r16.hl = result16;
+
+    gb_proc.cycles += 2;
+}
