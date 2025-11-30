@@ -243,4 +243,12 @@ void OP_0b00101010(void);
  */
 void OP_0b00101111(void);
 
+/*
+ * 0b00110010 / 0x32: LD (HL-),A
+ *
+ * Stores the value of register A into the memory location addressed by HL
+ * and then decrements HL. Flags are not affected. Duration: 2 machine cycles.
+ */
+void OP_0b00110010(void);
+
 #endif
