@@ -309,3 +309,14 @@ void OP_0b001xx000(void)
         gb_proc.cycles += 2;
     }
 }
+
+void OP_0b00100010(void)
+{
+    uint16_t addr = gb_proc.registers.r16.hl;
+    uint8_t data = gb_proc.registers.r8.a;
+
+    mem_write(addr, data);
+    gb_proc.registers.r16.hl = (uint16_t)(addr + 1);
+
+    gb_proc.cycles += 2;
+}

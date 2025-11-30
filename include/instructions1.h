@@ -206,4 +206,12 @@ void OP_0b00011111(void);
  */
 void OP_0b001xx000(void);
 
+/*
+ * 0b00100010 / 0x22: LD (HL+),A
+ *
+ * Stores the value of register A into the memory location addressed by HL
+ * and then increments HL. Flags are not affected. Duration: 2 machine cycles.
+ */
+void OP_0b00100010(void);
+
 #endif
