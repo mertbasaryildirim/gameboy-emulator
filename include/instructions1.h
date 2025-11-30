@@ -116,4 +116,15 @@ void OP_0b00001010(void);
  */
 void OP_0b00xx1011(void);
 
+/*
+ * 0b00001111 / 0x0F: RRCA
+ *
+ * Rotates the A register right by one bit in a circular manner. Bit 0 is
+ * copied into both bit 7 and the carry flag.
+ *
+ * Z is cleared, N is cleared, H is cleared, and C is set to the previous
+ * value of bit 0. Duration: 1 machine cycle.
+ */
+void OP_0b00001111(void);
+
 #endif
