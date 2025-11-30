@@ -399,3 +399,11 @@ void OP_0b00110110(void)
 
     gb_proc.cycles += 3;
 }
+
+void OP_0b00110111(void)
+{
+    GB_FLAG_CLEAR(GB_FLAG_N | GB_FLAG_H);
+    GB_FLAG_SET(GB_FLAG_C);
+
+    gb_proc.cycles += 1;
+}
