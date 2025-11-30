@@ -205,3 +205,12 @@ void OP_0b00001111(void)
 
     gb_proc.cycles += 1;
 }
+
+void OP_0b00010000(void)
+{
+    /* STOP is 2 bytes: opcode + dummy/parameter.
+       Fetch and ignore the second byte so PC skips it. */
+    (void)mem_read(++gb_proc.pc);
+    gb_proc.stopped = 1;
+    gb_proc.cycles += 1;
+}
