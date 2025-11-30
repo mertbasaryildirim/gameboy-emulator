@@ -235,4 +235,12 @@ void OP_0b00100111(void);
  */
 void OP_0b00101010(void);
 
+/*
+ * 0b00101111 / 0x2F: CPL
+ *
+ * Complements (bitwise inverts) the value in register A. The N and H flags
+ * are set; Z and C are left unchanged. Duration: 1 machine cycle.
+ */
+void OP_0b00101111(void);
+
 #endif

@@ -371,3 +371,12 @@ void OP_0b00101010(void)
 
     gb_proc.cycles += 2;
 }
+
+void OP_0b00101111(void)
+{
+    gb_proc.registers.r8.a = (uint8_t)~gb_proc.registers.r8.a;
+
+    GB_FLAG_SET(GB_FLAG_N | GB_FLAG_H);
+
+    gb_proc.cycles += 1;
+}
