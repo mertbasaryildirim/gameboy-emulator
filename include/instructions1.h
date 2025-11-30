@@ -167,4 +167,12 @@ void OP_0b00010111(void);
  */
 void OP_0b00011000(void);
 
+/*
+ * 0b00011010 / 0x1A: LD A,(DE)
+ *
+ * Loads the 8-bit value from memory at the address held in the DE register
+ * pair into register A. Flags are not affected. Duration: 2 machine cycles.
+ */
+void OP_0b00011010(void);
+
 #endif

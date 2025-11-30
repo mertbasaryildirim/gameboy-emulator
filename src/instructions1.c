@@ -248,3 +248,11 @@ void OP_0b00011000(void)
 
     gb_proc.cycles += 3;
 }
+
+void OP_0b00011010(void)
+{
+    uint16_t addr = gb_proc.registers.r16.de;
+    gb_proc.registers.r8.a = mem_read(addr);
+
+    gb_proc.cycles += 2;
+}
