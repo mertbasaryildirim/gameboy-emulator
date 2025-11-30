@@ -320,3 +320,44 @@ void OP_0b00100010(void)
 
     gb_proc.cycles += 2;
 }
+
+void OP_0b00100111(void)
+{
+    uint8_t a = gb_proc.registers.r8.a;
+    uint8_t adjust = 0;
+    uint8_t c = GB_FLAG_IS_SET(GB_FLAG_C);
+    uint8_t n = GB_FLAG_IS_SET(GB_FLAG_N);
+    uint8_t h = GB_FLAG_IS_SET(GB_FLAG_H);
+
+    if (!n)
+    {
+        if (c || a > 0x99u)
+        {
+            adjust |= 0x60u;
+            c = 1;
+        }
+        if (h || (a & 0x0Fu) > 0x09u)
+            adjust |= 0x06u;
+
+        a = (uint8_t)(a + adjust);
+    }
+    else
+    {
+        if (c)
+            adjust |= 0x60u;
+        if (h)
+            adjust |= 0x06u;
+
+        a = (uint8_t)(a - adjust);
+    }
+
+    gb_proc.registers.r8.a = a;
+
+    GB_FLAG_CLEAR(GB_FLAG_Z | GB_FLAG_H | GB_FLAG_C);
+    if (a == 0)
+        GB_FLAG_SET(GB_FLAG_Z);
+    if (c)
+        GB_FLAG_SET(GB_FLAG_C);
+
+    gb_proc.cycles += 1;
+}
