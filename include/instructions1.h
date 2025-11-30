@@ -158,4 +158,13 @@ void OP_0b00010010(void);
  */
 void OP_0b00010111(void);
 
+/*
+ * 0b00011000 / 0x18: JR e
+ *
+ * Performs an unconditional relative jump using the signed 8-bit offset e.
+ * The offset is added to the address following this instruction to form the
+ * new program counter. Flags are not affected. Duration: 3 machine cycles.
+ */
+void OP_0b00011000(void);
+
 #endif

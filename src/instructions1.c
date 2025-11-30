@@ -240,3 +240,11 @@ void OP_0b00010111(void)
 
     gb_proc.cycles += 1;
 }
+
+void OP_0b00011000(void)
+{
+    int8_t e = (int8_t)mem_read(++gb_proc.pc);
+    gb_proc.pc = (uint16_t)(gb_proc.pc + (int16_t)e);
+
+    gb_proc.cycles += 3;
+}
