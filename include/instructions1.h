@@ -187,4 +187,23 @@ void OP_0b00011010(void);
  */
 void OP_0b00011111(void);
 
+/*
+ * 0b001xx000: JR cc,e
+ *
+ * Conditional relative jump using the signed 8-bit offset e. The bits xx in
+ * the opcode select one of four conditions based on the Z and C flags:
+ *
+ *   xx = 0 → JR NZ,e  (jump if Z == 0)
+ *   xx = 1 → JR Z,e   (jump if Z == 1)
+ *   xx = 2 → JR NC,e  (jump if C == 0)
+ *   xx = 3 → JR C,e   (jump if C == 1)
+ *
+ * The displacement byte e is always fetched. If the condition is true, the
+ * offset is applied to the address immediately following the instruction;
+ * otherwise execution continues with the next instruction. Flags are not
+ * modified. Duration: 3 machine cycles when the branch is taken, 2 when it
+ * is not taken.
+ */
+void OP_0b001xx000(void);
+
 #endif
