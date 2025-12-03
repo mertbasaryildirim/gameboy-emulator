@@ -445,9 +445,19 @@ void OP_0b01xxxxyy(void)
 
 void OP_0b01xxx110(void)
 {
-    uint8_t dst_idx = (gb_proc.opcode >> 3) & 0x07u; /* r */
+    uint8_t dst_idx = (gb_proc.opcode >> 3) & 0x07u;
 
     *reg8_table[dst_idx] = mem_read(gb_proc.registers.r16.hl);
+
+    gb_proc.cycles += 2;
+}
+
+void OP_0b01110xxx(void)
+{
+    uint8_t src_idx = gb_proc.opcode & 0x07u;
+    uint8_t value = *reg8_table[src_idx];
+
+    mem_write(gb_proc.registers.r16.hl, value);
 
     gb_proc.cycles += 2;
 }

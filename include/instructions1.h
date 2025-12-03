@@ -303,4 +303,13 @@ void OP_0b01xxxxyy(void);
  */
 void OP_0b01xxx110(void);
 
+/*
+ * 0b01110xxx: LD (HL),r
+ *
+ * Stores the value of register r into memory at address HL. The register
+ * index r is taken from bits xxx of the opcode and is never (HL). HL itself
+ * is not modified and flags are unchanged. Duration: 2 machine cycles.
+ */
+void OP_0b01110xxx(void);
+
 #endif
