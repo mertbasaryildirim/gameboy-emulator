@@ -429,3 +429,16 @@ void OP_0b00111111(void)
 
     gb_proc.cycles += 1;
 }
+
+void OP_0b01xxxxyy(void)
+{
+    uint8_t dst_idx = (gb_proc.opcode >> 3) & 0x07u;
+    uint8_t src_idx = gb_proc.opcode & 0x07u;
+
+    uint8_t *dst = reg8_table[dst_idx];
+    uint8_t *src = reg8_table[src_idx];
+
+    *dst = *src;
+
+    gb_proc.cycles += 1;
+}

@@ -284,4 +284,14 @@ void OP_0b00111010(void);
  */
 void OP_0b00111111(void);
 
+/*
+ * 0b01xxxxyy: LD r,r'
+ *
+ * Copies the value from 8-bit register r' into register r. Neither source
+ * nor destination is (HL); those cases are handled by separate LD r,(HL)
+ * and LD (HL),r instructions. Flags are not affected. Duration: 1 machine
+ * cycle.
+ */
+void OP_0b01xxxxyy(void);
+
 #endif
