@@ -294,4 +294,13 @@ void OP_0b00111111(void);
  */
 void OP_0b01xxxxyy(void);
 
+/*
+ * 0b01xxx110: LD r,(HL)
+ *
+ * Loads the 8-bit value from memory at address HL into register r. The
+ * register index r is taken from bits xxx of the opcode and is never (HL).
+ * Flags are not affected. Duration: 2 machine cycles.
+ */
+void OP_0b01xxx110(void);
+
 #endif
