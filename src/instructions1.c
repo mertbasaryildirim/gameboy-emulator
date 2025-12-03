@@ -442,3 +442,12 @@ void OP_0b01xxxxyy(void)
 
     gb_proc.cycles += 1;
 }
+
+void OP_0b01xxx110(void)
+{
+    uint8_t dst_idx = (gb_proc.opcode >> 3) & 0x07u; /* r */
+
+    *reg8_table[dst_idx] = mem_read(gb_proc.registers.r16.hl);
+
+    gb_proc.cycles += 2;
+}
