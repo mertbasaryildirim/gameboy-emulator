@@ -312,4 +312,13 @@ void OP_0b01xxx110(void);
  */
 void OP_0b01110xxx(void);
 
+/*
+ * 0b01110110 / 0x76: HALT
+ *
+ * Puts the CPU into the halted state until an interrupt occurs or
+ * the halt condition is otherwise cleared. Registers and flags are
+ * not modified. Duration: 1 machine cycle to enter the halt state.
+ */
+void OP_0b01110110(void);
+
 #endif
