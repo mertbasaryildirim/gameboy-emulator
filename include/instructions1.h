@@ -332,4 +332,15 @@ void OP_0b01110110(void);
  */
 void OP_0b10000xxx(void);
 
+/*
+ * 0b10000110 / 0x86: ADD A,(HL)
+ *
+ * Adds the byte at address HL to A and writes the sum back to A.
+ *
+ * The operand is fetched from memory pointed to by HL. The Z flag is set if
+ * the result is zero, N is cleared, H is set on carry out of bit 3, and C is
+ * set on carry out of bit 7. Duration: 2 machine cycles.
+ */
+void OP_0b10000110(void);
+
 #endif
