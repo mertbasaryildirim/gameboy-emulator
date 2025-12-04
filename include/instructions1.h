@@ -403,4 +403,16 @@ void OP_0b10010110(void);
  */
 void OP_0b10011xxx(void);
 
+/*
+ * 0b10011110 / 0x9E: SBC A,(HL)
+ *
+ * A ← A - (HL) - C.
+ *
+ * The operand is read from memory at the address in HL and the result
+ * is written back to A. Z is set if the result is zero, N is set, H is
+ * set if there is a borrow from bit 4, and C is set if there is a borrow
+ * from bit 7. Duration: 2 machine cycles.
+ */
+void OP_0b10011110(void);
+
 #endif
