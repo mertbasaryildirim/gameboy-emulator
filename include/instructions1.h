@@ -415,4 +415,16 @@ void OP_0b10011xxx(void);
  */
 void OP_0b10011110(void);
 
+/*
+ * 0b10100xxx: AND A,r
+ *
+ * Performs a bitwise AND between A and register r, then stores the
+ * result back into A. Bits xxx select B, C, D, E, H, L or A as the
+ * source register (excluding the (HL) case).
+ *
+ * Z is set if the result is zero; N is cleared; H is set; C is
+ * cleared. Duration: 1 machine cycle.
+ */
+void OP_0b10100xxx(void);
+
 #endif
