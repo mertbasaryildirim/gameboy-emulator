@@ -390,4 +390,17 @@ void OP_0b10010xxx(void);
  */
 void OP_0b10010110(void);
 
+/*
+ * 0b10011xxx: SBC A,r
+ *
+ * A ← A - r - C.
+ *
+ * Bits xxx select B, C, D, E, H, L or A as the source register
+ * (excluding the (HL) case). The result is written back to A.
+ * Z is set if the result is zero, N is set, H is set if there is a
+ * borrow from bit 4, and C is set if there is a borrow from bit 7.
+ * Duration: 1 machine cycle.
+ */
+void OP_0b10011xxx(void);
+
 #endif
