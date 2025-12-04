@@ -453,4 +453,18 @@ void OP_0b10100110(void);
  */
 void OP_0b10101xxx(void);
 
+/*
+ * 0b10110110 / 0xB6: OR (HL)
+ *
+ * Bitwise OR between A and the value at address HL, storing the
+ * result in A.
+ *
+ * Flags:
+ *   Z = 1 if result == 0, else 0
+ *   N = 0
+ *   H = 0
+ *   C = 0
+ */
+void OP_0b10110110(void);
+
 #endif
