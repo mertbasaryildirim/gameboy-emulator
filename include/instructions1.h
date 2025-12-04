@@ -343,4 +343,15 @@ void OP_0b10000xxx(void);
  */
 void OP_0b10000110(void);
 
+/*
+ * 0b10001xxx: ADC A,r
+ *
+ * Adds register r and the carry flag to A and writes the result back to A.
+ *
+ * Bits xxx select one of B, C, D, E, H, L or A (as source). Z is set if the
+ * result is zero, N is cleared, H is set on carry out of bit 3, and C is set
+ * on carry out of bit 7. Duration: 1 machine cycle.
+ */
+void OP_0b10001xxx(void);
+
 #endif
