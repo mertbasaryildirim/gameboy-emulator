@@ -579,3 +579,24 @@ void OP_0b10010xxx(void)
     gb_proc.registers.r8.a = result;
     gb_proc.cycles += 1;
 }
+
+void OP_0b10010110(void)
+{
+    uint8_t a = gb_proc.registers.r8.a;
+    uint8_t value = mem_read(gb_proc.registers.r16.hl);
+
+    uint8_t result = (uint8_t)(a - value);
+
+    GB_FLAG_CLEAR(GB_FLAG_Z | GB_FLAG_H | GB_FLAG_C);
+    GB_FLAG_SET(GB_FLAG_N);
+
+    if ((a & 0x0Fu) < (value & 0x0Fu))
+        GB_FLAG_SET(GB_FLAG_H);
+    if (a < value)
+        GB_FLAG_SET(GB_FLAG_C);
+    if (result == 0)
+        GB_FLAG_SET(GB_FLAG_Z);
+
+    gb_proc.registers.r8.a = result;
+    gb_proc.cycles += 2;
+}
