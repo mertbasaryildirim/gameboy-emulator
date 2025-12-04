@@ -468,6 +468,21 @@ void OP_0b10101xxx(void);
 void OP_0b10101110(void);
 
 /*
+ * 0b10110xxx: OR r
+ *
+ * Bitwise OR between A and register r, storing the result in A.
+ * Bits xxx select B, C, D, E, H, L or A as the source register
+ * (the (HL) case is handled separately).
+ *
+ * Flags:
+ *   Z = 1 if result == 0, else 0
+ *   N = 0
+ *   H = 0
+ *   C = 0
+ */
+void OP_0b10110xxx(void);
+
+/*
  * 0b10110110 / 0xB6: OR (HL)
  *
  * Bitwise OR between A and the value at address HL, storing the
