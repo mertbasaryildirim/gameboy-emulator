@@ -461,3 +461,27 @@ void OP_0b01110xxx(void)
 
     gb_proc.cycles += 2;
 }
+
+void OP_0b10000xxx(void)
+{
+    uint8_t src_idx = gb_proc.opcode & 0x07u;
+    uint8_t a = gb_proc.registers.r8.a;
+    uint8_t value = *reg8_table[src_idx];
+
+    uint16_t sum = (uint16_t)a + (uint16_t)value;
+
+    GB_FLAG_CLEAR(GB_FLAG_Z | GB_FLAG_N | GB_FLAG_H | GB_FLAG_C);
+
+    if (((a & 0x0Fu) + (value & 0x0Fu)) > 0x0Fu)
+        GB_FLAG_SET(GB_FLAG_H);
+    if (sum & 0x100u)
+        GB_FLAG_SET(GB_FLAG_C);
+
+    a = (uint8_t)sum;
+    gb_proc.registers.r8.a = a;
+
+    if (a == 0)
+        GB_FLAG_SET(GB_FLAG_Z);
+
+    gb_proc.cycles += 1;
+}

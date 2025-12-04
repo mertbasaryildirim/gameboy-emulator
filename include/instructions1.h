@@ -321,4 +321,15 @@ void OP_0b01110xxx(void);
  */
 void OP_0b01110110(void);
 
+/*
+ * 0b10000xxx: ADD A,r
+ *
+ * Adds the 8-bit register r to A and writes the sum back to A.
+ *
+ * Bits xxx select one of B, C, D, E, H, L or A (never (HL)). The Z flag is
+ * set if the result is zero, N is cleared, H is set on carry out of bit 3,
+ * and C is set on carry out of bit 7. Duration: 1 machine cycle.
+ */
+void OP_0b10000xxx(void);
+
 #endif
