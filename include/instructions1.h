@@ -427,4 +427,15 @@ void OP_0b10011110(void);
  */
 void OP_0b10100xxx(void);
 
+/*
+ * 0b10100110 / 0xA6: AND A,(HL)
+ *
+ * Performs a bitwise AND between A and the byte at address HL, then
+ * stores the result back into A.
+ *
+ * Z is set if the result is zero; N is cleared; H is set; C is
+ * cleared. Duration: 2 machine cycles.
+ */
+void OP_0b10100110(void);
+
 #endif
