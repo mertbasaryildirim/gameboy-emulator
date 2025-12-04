@@ -354,4 +354,16 @@ void OP_0b10000110(void);
  */
 void OP_0b10001xxx(void);
 
+/*
+ * 0b10001110 / 0x8E: ADC A,(HL)
+ *
+ * Adds the byte at address HL and the carry flag to A and writes the result
+ * back to A.
+ *
+ * The operand is read from memory pointed to by HL. Z is set if the result is
+ * zero, N is cleared, H is set on carry out of bit 3, and C is set on carry
+ * out of bit 7. Duration: 2 machine cycles.
+ */
+void OP_0b10001110(void);
+
 #endif
