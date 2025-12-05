@@ -521,4 +521,26 @@ void OP_0b10111xxx(void);
  */
 void OP_0b10111110(void);
 
+/*
+ * 0b110xx000: RET cc
+ *
+ * Conditional return from subroutine. The bits xx in the opcode select
+ * one of the four SM83 conditions:
+ *
+ *   00: NZ  (return if Z flag is 0)
+ *   01: Z   (return if Z flag is 1)
+ *   10: NC  (return if C flag is 0)
+ *   11: C   (return if C flag is 1)
+ *
+ * When the condition is true, a 16-bit return address is popped from
+ * the stack (low byte first, then high byte) and loaded into PC.
+ * If the condition is false, execution simply continues at the next
+ * instruction with no stack access.
+ *
+ * Timing:
+ *   cc == true  -> 5 machine cycles (stack pop + jump)
+ *   cc == false -> 2 machine cycles (condition test only)
+ */
+void OP_0b110xx000(void);
+
 #endif
