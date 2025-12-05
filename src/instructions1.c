@@ -800,3 +800,25 @@ void OP_0b110xx000(void)
         gb_proc.cycles += 2;
     }
 }
+
+void OP_0b11xx0001(void)
+{
+    uint8_t xx = (gb_proc.opcode >> 4) & 0x3u;
+
+    uint16_t sp = gb_proc.registers.r16.sp;
+    uint8_t lsb = mem_read(sp++);
+    uint8_t msb = mem_read(sp++);
+    gb_proc.registers.r16.sp = sp;
+
+    uint16_t value = (uint16_t)lsb | ((uint16_t)msb << 8);
+
+    uint16_t *rr_base = &gb_proc.registers.r16.af;
+    uint8_t index = (uint8_t)((xx + 1u) & 0x3u);
+    uint16_t *rr = rr_base + index;
+    *rr = value;
+
+    if (xx == 3u)
+        gb_proc.registers.r8.f &= 0xF0u;
+
+    gb_proc.cycles += 3;
+}
