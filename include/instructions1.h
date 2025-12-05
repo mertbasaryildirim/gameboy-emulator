@@ -543,4 +543,18 @@ void OP_0b10111110(void);
  */
 void OP_0b110xx000(void);
 
+/*
+ * 0b11xx0001: POP rr
+ *
+ * Pops a 16-bit value from the stack into register pair rr, where the bits
+ * xx in the opcode select one of BC, DE, HL, or AF.
+ *
+ * Two bytes are read from memory at SP (low, then high), SP is advanced by
+ * 2, and the combined 16-bit value is written into the selected register
+ * pair. When popping into AF, the lower four bits of F are cleared to keep
+ * the flag register in the Game Boy–compatible format. The operation
+ * consumes 3 machine cycles.
+ */
+void OP_0b11xx0001(void);
+
 #endif
