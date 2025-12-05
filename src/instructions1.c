@@ -779,3 +779,24 @@ void OP_0b10111110(void)
 
     gb_proc.cycles += 2;
 }
+
+void OP_0b110xx000(void)
+{
+    uint8_t cc = (gb_proc.opcode >> 3) & 0x03u;
+    uint8_t z = (gb_proc.registers.r8.f & GB_FLAG_Z) != 0;
+    uint8_t c = (gb_proc.registers.r8.f & GB_FLAG_C) != 0;
+    uint8_t flag = (cc & 0x02u) ? c : z;
+    uint8_t take = (cc & 0x01u) ? flag : (uint8_t)!flag;
+
+    if (take)
+    {
+        uint8_t lo = mem_read(gb_proc.registers.r16.sp++);
+        uint8_t hi = mem_read(gb_proc.registers.r16.sp++);
+        gb_proc.pc = (uint16_t)((uint16_t)lo | ((uint16_t)hi << 8));
+        gb_proc.cycles += 5;
+    }
+    else
+    {
+        gb_proc.cycles += 2;
+    }
+}
