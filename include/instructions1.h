@@ -509,4 +509,16 @@ void OP_0b10110110(void);
  */
 void OP_0b10111xxx(void);
 
+/*
+ * 0b10111110 / 0xBE: CP (HL)
+ *
+ * Compares the value at address HL with A by computing A - (HL) and
+ * updating flags based on the result, without modifying A.
+ *
+ * Z is set if the subtraction result is zero. N is set. H is set if
+ * there is a borrow from bit 4. C is set if there is a borrow from
+ * bit 7. Duration: 2 machine cycles.
+ */
+void OP_0b10111110(void);
+
 #endif
