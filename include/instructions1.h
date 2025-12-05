@@ -557,4 +557,20 @@ void OP_0b110xx000(void);
  */
 void OP_0b11xx0001(void);
 
+/*
+ * 0b110xx010: JP cc,nn
+ *
+ * Absolute jump to the 16-bit operand nn if the condition code cc is met.
+ * The bits xx in the opcode select one of four conditions:
+ *   00: NZ (Z flag clear)
+ *   01: Z  (Z flag set)
+ *   10: NC (C flag clear)
+ *   11: C  (C flag set)
+ *
+ * The 16-bit target nn is read in little-endian order from the two bytes
+ * following the opcode. The operand is always fetched, even when the
+ * branch is not taken.
+ */
+void OP_0b110xx010(void);
+
 #endif

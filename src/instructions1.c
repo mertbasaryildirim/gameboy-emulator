@@ -822,3 +822,31 @@ void OP_0b11xx0001(void)
 
     gb_proc.cycles += 3;
 }
+
+void OP_0b110xx010(void)
+{
+    static const uint8_t cond_masks[4] = {
+        GB_FLAG_Z, GB_FLAG_Z, GB_FLAG_C, GB_FLAG_C};
+    static const uint8_t cond_true_when_set[4] = {
+        0u, 1u, 0u, 1u};
+
+    uint8_t xx = (gb_proc.opcode >> 3) & 0x3u;
+
+    uint8_t nn_l = mem_read(++gb_proc.pc);
+    uint8_t nn_h = mem_read(++gb_proc.pc);
+    uint16_t nn = (uint16_t)nn_l | ((uint16_t)nn_h << 8);
+
+    uint8_t mask = cond_masks[xx];
+    uint8_t want_set = cond_true_when_set[xx];
+    uint8_t flag_is_set = (gb_proc.registers.r8.f & mask) != 0u;
+
+    if (flag_is_set == (want_set != 0u))
+    {
+        gb_proc.pc = (uint16_t)(nn - 1u);
+        gb_proc.cycles += 4;
+    }
+    else
+    {
+        gb_proc.cycles += 3;
+    }
+}
