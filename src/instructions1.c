@@ -740,3 +740,23 @@ void OP_0b10110110(void)
 
     gb_proc.cycles += 2;
 }
+
+void OP_0b10111xxx(void)
+{
+    uint8_t idx = gb_proc.opcode & 0x07u;
+    uint8_t a = gb_proc.registers.r8.a;
+    uint8_t value = *reg8_table[idx];
+    uint8_t res = (uint8_t)(a - value);
+
+    GB_FLAG_SET(GB_FLAG_N);
+    GB_FLAG_CLEAR(GB_FLAG_Z | GB_FLAG_H | GB_FLAG_C);
+
+    if (res == 0)
+        GB_FLAG_SET(GB_FLAG_Z);
+    if ((a & 0x0Fu) < (value & 0x0Fu))
+        GB_FLAG_SET(GB_FLAG_H);
+    if (a < value)
+        GB_FLAG_SET(GB_FLAG_C);
+
+    gb_proc.cycles += 1;
+}

@@ -496,4 +496,17 @@ void OP_0b10110xxx(void);
  */
 void OP_0b10110110(void);
 
+/*
+ * 0b10111xxx: CP r
+ *
+ * Compares register r with A by computing A - r and updating flags
+ * based on the result, without modifying A. Bits xxx select B, C, D,
+ * E, H, L or A as the source register (excluding the (HL) case).
+ *
+ * Z is set if the subtraction result is zero. N is set. H is set if
+ * there is a borrow from bit 4. C is set if there is a borrow from
+ * bit 7. Duration: 1 machine cycle.
+ */
+void OP_0b10111xxx(void);
+
 #endif
