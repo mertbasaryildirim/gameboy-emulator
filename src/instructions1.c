@@ -1173,3 +1173,26 @@ void OP_0b11110110(void)
 
     gb_proc.cycles += 2;
 }
+
+void OP_0b11111000(void)
+{
+    uint16_t sp = gb_proc.registers.r16.sp;
+    int8_t e = (int8_t)mem_read(gb_proc.pc++);
+
+    uint16_t result = (uint16_t)(sp + e);
+    gb_proc.registers.r16.hl = result;
+
+    GB_FLAG_CLEAR(GB_FLAG_Z | GB_FLAG_N);
+
+    if (((sp & 0x0Fu) + ((uint16_t)e & 0x0Fu)) > 0x0Fu)
+        GB_FLAG_SET(GB_FLAG_H);
+    else
+        GB_FLAG_CLEAR(GB_FLAG_H);
+
+    if (((sp & 0xFFu) + ((uint16_t)e & 0xFFu)) > 0xFFu)
+        GB_FLAG_SET(GB_FLAG_C);
+    else
+        GB_FLAG_CLEAR(GB_FLAG_C);
+
+    gb_proc.cycles += 3;
+}
