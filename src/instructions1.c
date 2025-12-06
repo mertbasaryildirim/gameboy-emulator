@@ -1077,3 +1077,25 @@ void OP_0b11100110(void)
 
     gb_proc.cycles += 2;
 }
+
+void OP_0b11101000(void)
+{
+    uint8_t e = mem_read(gb_proc.pc++);
+    int8_t se = (int8_t)e;
+
+    uint16_t sp = gb_proc.registers.r16.sp;
+    uint16_t result = (uint16_t)(sp + se);
+
+    uint16_t sp_low = sp & 0x00FFu;
+    uint16_t sum_low = sp_low + (uint16_t)e;
+
+    GB_FLAG_CLEAR(GB_FLAG_Z | GB_FLAG_N | GB_FLAG_H | GB_FLAG_C);
+
+    if ((sp_low ^ (uint16_t)e ^ sum_low) & 0x10u)
+        GB_FLAG_SET(GB_FLAG_H);
+    if ((sp_low ^ (uint16_t)e ^ sum_low) & 0x100u)
+        GB_FLAG_SET(GB_FLAG_C);
+
+    gb_proc.registers.r16.sp = result;
+    gb_proc.cycles += 4;
+}
