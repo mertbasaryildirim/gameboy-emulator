@@ -769,4 +769,15 @@ void OP_0b11110011(void);
  */
 void OP_0b11110110(void);
 
+/*
+ * 0b11111000 / 0xF8: LD HL, SP+e
+ *
+ * Adds the signed 8-bit immediate operand e to the 16-bit stack pointer SP
+ * and loads the 16-bit result into register HL. Z and N are cleared. H is
+ * set if there is a carry from bit 3 to bit 4 when adding the low nibble,
+ * and C is set if there is a carry from bit 7 to bit 8 when adding the low
+ * byte (SP & 0xFF) and e.
+ */
+void OP_0b11111000(void);
+
 #endif
