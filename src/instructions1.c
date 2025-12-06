@@ -914,3 +914,32 @@ void OP_0b11xx0101(void)
 
     gb_proc.cycles += 4;
 }
+
+void OP_0b11000110(void)
+{
+    uint8_t n = mem_read(++gb_proc.pc);
+
+    uint8_t a = gb_proc.registers.r8.a;
+    uint16_t sum = (uint16_t)a + (uint16_t)n;
+    uint8_t result = (uint8_t)sum;
+
+    if (result == 0u)
+        GB_FLAG_SET(GB_FLAG_Z);
+    else
+        GB_FLAG_CLEAR(GB_FLAG_Z);
+
+    GB_FLAG_CLEAR(GB_FLAG_N);
+
+    if (((a ^ n ^ result) & 0x10u) != 0u)
+        GB_FLAG_SET(GB_FLAG_H);
+    else
+        GB_FLAG_CLEAR(GB_FLAG_H);
+
+    if (sum & 0x100u)
+        GB_FLAG_SET(GB_FLAG_C);
+    else
+        GB_FLAG_CLEAR(GB_FLAG_C);
+
+    gb_proc.registers.r8.a = result;
+    gb_proc.cycles += 2;
+}
