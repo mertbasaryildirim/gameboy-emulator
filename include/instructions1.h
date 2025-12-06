@@ -667,4 +667,13 @@ void OP_0b11010110(void);
  */
 void OP_0b11011001(void);
 
+/*
+ * 0b11011110 / 0xDE: SBC n
+ *
+ * Subtracts the 8-bit immediate operand n and the carry flag from register A
+ * and stores the result back in A. Updates Z, N, H and C according to the
+ * subtract-with-carry rules (N is set).
+ */
+void OP_0b11011110(void);
+
 #endif
