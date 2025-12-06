@@ -850,3 +850,13 @@ void OP_0b110xx010(void)
         gb_proc.cycles += 3;
     }
 }
+
+void OP_0b11000011(void)
+{
+    uint8_t nn_l = mem_read(++gb_proc.pc);
+    uint8_t nn_h = mem_read(++gb_proc.pc);
+    uint16_t nn = (uint16_t)nn_l | ((uint16_t)nn_h << 8);
+
+    gb_proc.pc = (uint16_t)(nn - 1u);
+    gb_proc.cycles += 4;
+}
