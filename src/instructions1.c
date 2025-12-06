@@ -1053,3 +1053,10 @@ void OP_0b11100000(void)
     mem_write(addr, gb_proc.registers.r8.a);
     gb_proc.cycles += 3;
 }
+
+void OP_0b11100010(void)
+{
+    uint16_t addr = (uint16_t)0xFF00u | gb_proc.registers.r8.c;
+    mem_write(addr, gb_proc.registers.r8.a);
+    gb_proc.cycles += 2;
+}
