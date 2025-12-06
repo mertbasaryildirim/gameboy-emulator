@@ -1099,3 +1099,9 @@ void OP_0b11101000(void)
     gb_proc.registers.r16.sp = result;
     gb_proc.cycles += 4;
 }
+
+void OP_0b11101001(void)
+{
+    gb_proc.pc = gb_proc.registers.r16.hl;
+    gb_proc.cycles += 1;
+}
