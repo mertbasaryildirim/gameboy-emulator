@@ -1019,3 +1019,29 @@ void OP_0b11011001(void)
     gb_proc.ime = 1;
     gb_proc.cycles += 4;
 }
+
+void OP_0b11011110(void)
+{
+    uint8_t n = mem_read(gb_proc.pc++);
+    uint8_t a = gb_proc.registers.r8.a;
+    uint8_t carry = GB_FLAG_IS_SET(GB_FLAG_C) ? 1u : 0u;
+
+    uint16_t result16 = (uint16_t)a - (uint16_t)n - (uint16_t)carry;
+    uint8_t result8 = (uint8_t)result16;
+
+    gb_proc.registers.r8.a = result8;
+
+    uint8_t f = GB_FLAG_N;
+
+    if (result8 == 0u)
+        f |= GB_FLAG_Z;
+
+    if (((a ^ n ^ result16) & 0x10u) != 0u)
+        f |= GB_FLAG_H;
+
+    if ((result16 & 0x100u) != 0u)
+        f |= GB_FLAG_C;
+
+    gb_proc.registers.r8.f = f;
+    gb_proc.cycles += 2;
+}
