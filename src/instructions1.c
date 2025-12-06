@@ -1045,3 +1045,11 @@ void OP_0b11011110(void)
     gb_proc.registers.r8.f = f;
     gb_proc.cycles += 2;
 }
+
+void OP_0b11100000(void)
+{
+    uint8_t n = mem_read(gb_proc.pc++);
+    uint16_t addr = (uint16_t)0xFF00u | (uint16_t)n;
+    mem_write(addr, gb_proc.registers.r8.a);
+    gb_proc.cycles += 3;
+}

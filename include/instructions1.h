@@ -676,4 +676,12 @@ void OP_0b11011001(void);
  */
 void OP_0b11011110(void);
 
+/*
+ * 0b11100000 / 0xE0: LDH (n), A
+ *
+ * Stores the value of register A into memory at address 0xFF00 + n, where
+ * n is the 8-bit immediate operand that follows the opcode.
+ */
+void OP_0b11100000(void);
+
 #endif
