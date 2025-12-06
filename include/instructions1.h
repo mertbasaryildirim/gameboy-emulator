@@ -736,4 +736,12 @@ void OP_0b11101010(void);
  */
 void OP_0b11101110(void);
 
+/*
+ * 0b11110000 / 0xF0: LDH A, (n)
+ *
+ * Loads register A from address 0xFF00 + 8-bit immediate operand n.
+ * Flags are not affected.
+ */
+void OP_0b11110000(void);
+
 #endif
