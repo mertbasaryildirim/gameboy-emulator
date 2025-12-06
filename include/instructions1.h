@@ -710,4 +710,12 @@ void OP_0b11100110(void);
  */
 void OP_0b11101000(void);
 
+/*
+ * 0b11101001 / 0xE9: JP HL
+ *
+ * Unconditional jump to the absolute address held in register pair HL by
+ * copying HL into PC. Flags are not affected.
+ */
+void OP_0b11101001(void);
+
 #endif
