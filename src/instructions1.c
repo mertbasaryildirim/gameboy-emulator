@@ -957,3 +957,11 @@ void OP_0b11xxx111(void)
 
     gb_proc.cycles += 4;
 }
+
+void OP_0b11001001(void)
+{
+    uint8_t lsb = mem_read(gb_proc.registers.r16.sp++);
+    uint8_t msb = mem_read(gb_proc.registers.r16.sp++);
+    gb_proc.pc = (uint16_t)lsb | ((uint16_t)msb << 8);
+    gb_proc.cycles += 4;
+}

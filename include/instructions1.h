@@ -624,4 +624,12 @@ void OP_0b11000110(void);
  */
 void OP_0b11xxx111(void);
 
+/*
+ * 0b11001001 / 0xC9: RET
+ *
+ * Pops a 16-bit return address from the stack and loads it into the
+ * program counter.
+ */
+void OP_0b11001001(void);
+
 #endif
