@@ -860,3 +860,37 @@ void OP_0b11000011(void)
     gb_proc.pc = (uint16_t)(nn - 1u);
     gb_proc.cycles += 4;
 }
+
+void OP_0b110xx100(void)
+{
+    uint8_t cc = (gb_proc.opcode >> 3) & 0x3u;
+
+    uint8_t nn_l = mem_read(++gb_proc.pc);
+    uint8_t nn_h = mem_read(++gb_proc.pc);
+    uint16_t nn = (uint16_t)nn_l | ((uint16_t)nn_h << 8);
+
+    static const uint8_t cc_mask[4] = {GB_FLAG_Z, GB_FLAG_Z, GB_FLAG_C, GB_FLAG_C};
+    static const uint8_t cc_value[4] = {0u, GB_FLAG_Z, 0u, GB_FLAG_C};
+
+    uint8_t f = gb_proc.registers.r8.f;
+
+    if ((f & cc_mask[cc]) == cc_value[cc])
+    {
+        uint16_t ret = (uint16_t)(gb_proc.pc + 1u);
+        uint16_t sp = gb_proc.registers.r16.sp;
+
+        sp -= 1;
+        mem_write(sp, (uint8_t)(ret >> 8));
+        sp -= 1;
+        mem_write(sp, (uint8_t)(ret & 0xFFu));
+
+        gb_proc.registers.r16.sp = sp;
+        gb_proc.pc = (uint16_t)(nn - 1u);
+
+        gb_proc.cycles += 6;
+    }
+    else
+    {
+        gb_proc.cycles += 3;
+    }
+}

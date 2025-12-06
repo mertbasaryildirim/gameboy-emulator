@@ -582,4 +582,15 @@ void OP_0b110xx010(void);
  */
 void OP_0b11000011(void);
 
+/*
+ * 0b110xx100: CALL cc,nn
+ *
+ * Conditional call to the 16-bit absolute address nn. The condition cc is
+ * encoded in bits xx of the opcode and selects one of NZ, Z, NC, or C.
+ * If the condition is true, the address of the next instruction is pushed
+ * onto the stack and execution continues at nn. If the condition is false,
+ * only the operand bytes are skipped.
+ */
+void OP_0b110xx100(void);
+
 #endif
