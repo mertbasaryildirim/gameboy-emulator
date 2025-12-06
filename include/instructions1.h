@@ -788,4 +788,13 @@ void OP_0b11111000(void);
  */
 void OP_0b11111010(void);
 
+/*
+ * 0b11111011 / 0xFB: EI
+ *
+ * Enables maskable interrupts by setting IME to 1. On real hardware the
+ * enable takes effect after the following instruction; this emulator
+ * models it by setting IME when executing EI.
+ */
+void OP_0b11111011(void);
+
 #endif
