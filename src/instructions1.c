@@ -1105,3 +1105,14 @@ void OP_0b11101001(void)
     gb_proc.pc = gb_proc.registers.r16.hl;
     gb_proc.cycles += 1;
 }
+
+void OP_0b11101010(void)
+{
+    uint8_t lsb = mem_read(gb_proc.pc++);
+    uint8_t msb = mem_read(gb_proc.pc++);
+    uint16_t addr = (uint16_t)lsb | ((uint16_t)msb << 8);
+
+    mem_write(addr, gb_proc.registers.r8.a);
+
+    gb_proc.cycles += 4;
+}

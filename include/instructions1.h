@@ -718,4 +718,13 @@ void OP_0b11101000(void);
  */
 void OP_0b11101001(void);
 
+/*
+ * 0b11101010 / 0xEA: LD (nn), A
+ *
+ * Writes the value of register A to the absolute 16-bit address nn that
+ * follows the opcode (nn is encoded little-endian as LSB then MSB).
+ * Flags are not affected.
+ */
+void OP_0b11101010(void);
+
 #endif
