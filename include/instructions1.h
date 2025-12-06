@@ -573,4 +573,13 @@ void OP_0b11xx0001(void);
  */
 void OP_0b110xx010(void);
 
+/*
+ * 0b11000011 / 0xC3: JP nn
+ *
+ * Unconditional absolute jump to the 16-bit immediate operand nn.
+ * The target address nn is read in little-endian order from the two
+ * bytes following the opcode, and execution continues at that address.
+ */
+void OP_0b11000011(void);
+
 #endif
