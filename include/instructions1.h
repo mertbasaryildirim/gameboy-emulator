@@ -641,4 +641,13 @@ void OP_0b11001001(void);
  */
 void OP_0b11001101(void);
 
+/*
+ * 0b11001110 / 0xCE: ADC n
+ *
+ * Adds the 8-bit immediate operand n and the carry flag to register A and
+ * stores the result back in A. Updates Z, N, H and C according to the
+ * add-with-carry rules (N is cleared).
+ */
+void OP_0b11001110(void);
+
 #endif

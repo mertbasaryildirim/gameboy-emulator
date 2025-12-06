@@ -980,3 +980,26 @@ void OP_0b11001101(void)
     gb_proc.pc = nn;
     gb_proc.cycles += 6;
 }
+
+void OP_0b11001110(void)
+{
+    uint8_t n = mem_read(gb_proc.pc++);
+    uint8_t a = gb_proc.registers.r8.a;
+    uint8_t carry_in = GB_FLAG_IS_SET(GB_FLAG_C) ? 1u : 0u;
+
+    uint16_t sum = (uint16_t)a + (uint16_t)n + (uint16_t)carry_in;
+    uint8_t result = (uint8_t)sum;
+
+    gb_proc.registers.r8.a = result;
+
+    GB_FLAG_CLEAR(GB_FLAG_Z | GB_FLAG_N | GB_FLAG_H | GB_FLAG_C);
+
+    if (result == 0)
+        GB_FLAG_SET(GB_FLAG_Z);
+    if (((a & 0x0Fu) + (n & 0x0Fu) + carry_in) > 0x0Fu)
+        GB_FLAG_SET(GB_FLAG_H);
+    if (sum > 0xFFu)
+        GB_FLAG_SET(GB_FLAG_C);
+
+    gb_proc.cycles += 2;
+}
