@@ -744,4 +744,12 @@ void OP_0b11101110(void);
  */
 void OP_0b11110000(void);
 
+/*
+ * 0b11110010 / 0xF2: LDH A, (C)
+ *
+ * Loads the 8-bit value from address 0xFF00 + C into register A.
+ * Flags are not affected.
+ */
+void OP_0b11110010(void);
+
 #endif
