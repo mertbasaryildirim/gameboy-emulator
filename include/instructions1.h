@@ -604,4 +604,14 @@ void OP_0b110xx100(void);
  */
 void OP_0b11xx0101(void);
 
+/*
+ * 0b11000110 / 0xC6: ADD n
+ *
+ * Adds an 8-bit immediate value n to the A register. The result is written
+ * back to A and the Z, N, H, and C flags are updated according to the Game Boy
+ * 8-bit addition rules (Z set if result is zero, N cleared, H and C reflect
+ * carry from bit 3 and bit 7 respectively).
+ */
+void OP_0b11000110(void);
+
 #endif
