@@ -659,4 +659,12 @@ void OP_0b11001110(void);
  */
 void OP_0b11010110(void);
 
+/*
+ * 0b11011001 / 0xD9: RETI
+ *
+ * Pops a 16-bit return address from the stack into PC and enables
+ * interrupts by setting IME = 1.
+ */
+void OP_0b11011001(void);
+
 #endif
