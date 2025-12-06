@@ -894,3 +894,23 @@ void OP_0b110xx100(void)
         gb_proc.cycles += 3;
     }
 }
+
+void OP_0b11xx0101(void)
+{
+    uint8_t xx = (gb_proc.opcode >> 4) & 0x3u;
+
+    uint16_t *rr_base = &gb_proc.registers.r16.af;
+    uint8_t index = (uint8_t)((xx + 1u) & 0x3u);
+    uint16_t value = rr_base[index];
+
+    if (xx == 3u)
+        value &= 0xFFF0u;
+
+    gb_proc.registers.r16.sp--;
+    mem_write(gb_proc.registers.r16.sp, (uint8_t)(value >> 8));
+
+    gb_proc.registers.r16.sp--;
+    mem_write(gb_proc.registers.r16.sp, (uint8_t)(value & 0xFFu));
+
+    gb_proc.cycles += 4;
+}

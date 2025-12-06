@@ -593,4 +593,15 @@ void OP_0b11000011(void);
  */
 void OP_0b110xx100(void);
 
+/*
+ * 0b11xx0101: PUSH rr
+ *
+ * Pushes the 16-bit register pair rr onto the stack. The bits xx select:
+ *   00 -> BC, 01 -> DE, 10 -> HL, 11 -> AF.
+ *
+ * The stack pointer is decremented by 2, and the high byte of rr is written
+ * first, followed by the low byte. The instruction consumes 4 machine cycles.
+ */
+void OP_0b11xx0101(void);
+
 #endif
