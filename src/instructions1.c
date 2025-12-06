@@ -1150,3 +1150,9 @@ void OP_0b11110010(void)
     gb_proc.registers.r8.a = mem_read(addr);
     gb_proc.cycles += 2;
 }
+
+void OP_0b11110011(void)
+{
+    gb_proc.ime = 0;
+    gb_proc.cycles += 1;
+}
