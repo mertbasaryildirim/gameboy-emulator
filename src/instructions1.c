@@ -1010,3 +1010,12 @@ void OP_0b11010110(void)
     alu_sub(n);
     gb_proc.cycles += 2;
 }
+
+void OP_0b11011001(void)
+{
+    uint8_t lsb = mem_read(gb_proc.registers.r16.sp++);
+    uint8_t msb = mem_read(gb_proc.registers.r16.sp++);
+    gb_proc.pc = (uint16_t)lsb | ((uint16_t)msb << 8);
+    gb_proc.ime = 1;
+    gb_proc.cycles += 4;
+}
