@@ -650,4 +650,13 @@ void OP_0b11001101(void);
  */
 void OP_0b11001110(void);
 
+/*
+ * 0b11010110 / 0xD6: SUB n
+ *
+ * Subtracts the 8-bit immediate operand n from register A and stores the
+ * result back in A. Updates Z, N, H and C according to the subtraction
+ * rules (N is set).
+ */
+void OP_0b11010110(void);
+
 #endif

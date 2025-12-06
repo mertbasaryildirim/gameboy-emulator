@@ -1003,3 +1003,10 @@ void OP_0b11001110(void)
 
     gb_proc.cycles += 2;
 }
+
+void OP_0b11010110(void)
+{
+    uint8_t n = mem_read(gb_proc.pc++);
+    alu_sub(n);
+    gb_proc.cycles += 2;
+}
