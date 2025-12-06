@@ -752,4 +752,12 @@ void OP_0b11110000(void);
  */
 void OP_0b11110010(void);
 
+/*
+ * 0b11110011 / 0xF3: DI
+ *
+ * Disables maskable interrupts by clearing the global interrupt master
+ * enable (IME = 0). No CPU flags are modified.
+ */
+void OP_0b11110011(void);
+
 #endif
