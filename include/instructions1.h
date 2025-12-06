@@ -632,4 +632,13 @@ void OP_0b11xxx111(void);
  */
 void OP_0b11001001(void);
 
+/*
+ * 0b11001101 / 0xCD: CALL nn
+ *
+ * Pushes the return address (the address of the next instruction) onto the
+ * stack and then jumps to the absolute 16-bit address nn read from the
+ * instruction stream.
+ */
+void OP_0b11001101(void);
+
 #endif

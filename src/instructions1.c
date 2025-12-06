@@ -965,3 +965,18 @@ void OP_0b11001001(void)
     gb_proc.pc = (uint16_t)lsb | ((uint16_t)msb << 8);
     gb_proc.cycles += 4;
 }
+
+void OP_0b11001101(void)
+{
+    uint8_t lsb = mem_read(gb_proc.pc++);
+    uint8_t msb = mem_read(gb_proc.pc++);
+    uint16_t nn = (uint16_t)lsb | ((uint16_t)msb << 8);
+
+    uint16_t ret = gb_proc.pc;
+
+    mem_write(--gb_proc.registers.r16.sp, (uint8_t)(ret >> 8));
+    mem_write(--gb_proc.registers.r16.sp, (uint8_t)(ret & 0xFFu));
+
+    gb_proc.pc = nn;
+    gb_proc.cycles += 6;
+}
