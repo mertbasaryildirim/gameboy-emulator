@@ -692,4 +692,13 @@ void OP_0b11100000(void);
  */
 void OP_0b11100010(void);
 
+/*
+ * 0b11100110 / 0xE6: AND n
+ *
+ * Performs a bitwise AND between register A and the 8-bit immediate operand n,
+ * stores the result back in A and updates Z, N, H and C according to the AND
+ * rules (Z set if result is zero, N and C cleared, H set).
+ */
+void OP_0b11100110(void);
+
 #endif

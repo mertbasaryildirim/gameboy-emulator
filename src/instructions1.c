@@ -1060,3 +1060,20 @@ void OP_0b11100010(void)
     mem_write(addr, gb_proc.registers.r8.a);
     gb_proc.cycles += 2;
 }
+
+void OP_0b11100110(void)
+{
+    uint8_t n = mem_read(gb_proc.pc++);
+    uint8_t result = gb_proc.registers.r8.a & n;
+    gb_proc.registers.r8.a = result;
+
+    if (result == 0)
+        GB_FLAG_SET(GB_FLAG_Z);
+    else
+        GB_FLAG_CLEAR(GB_FLAG_Z);
+
+    GB_FLAG_CLEAR(GB_FLAG_N | GB_FLAG_C);
+    GB_FLAG_SET(GB_FLAG_H);
+
+    gb_proc.cycles += 2;
+}
