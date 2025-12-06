@@ -727,4 +727,13 @@ void OP_0b11101001(void);
  */
 void OP_0b11101010(void);
 
+/*
+ * 0b11101110 / 0xEE: XOR n
+ *
+ * Performs a bitwise XOR between register A and the 8-bit immediate operand n
+ * and stores the result back in A. Sets Z if the result is zero and clears
+ * N, H and C.
+ */
+void OP_0b11101110(void);
+
 #endif

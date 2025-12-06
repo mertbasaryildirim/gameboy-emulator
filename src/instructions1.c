@@ -1116,3 +1116,20 @@ void OP_0b11101010(void)
 
     gb_proc.cycles += 4;
 }
+
+void OP_0b11101110(void)
+{
+    uint8_t n = mem_read(gb_proc.pc++);
+    uint8_t result = (uint8_t)(gb_proc.registers.r8.a ^ n);
+
+    gb_proc.registers.r8.a = result;
+
+    if (result == 0)
+        GB_FLAG_SET(GB_FLAG_Z);
+    else
+        GB_FLAG_CLEAR(GB_FLAG_Z);
+
+    GB_FLAG_CLEAR(GB_FLAG_N | GB_FLAG_H | GB_FLAG_C);
+
+    gb_proc.cycles += 2;
+}
