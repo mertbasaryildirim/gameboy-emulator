@@ -701,4 +701,13 @@ void OP_0b11100010(void);
  */
 void OP_0b11100110(void);
 
+/*
+ * 0b11101000 / 0xE8: ADD SP, e
+ *
+ * Adds the signed 8-bit immediate operand e to the 16-bit stack pointer SP and
+ * stores the 16-bit result back in SP. Z is cleared, N is cleared, and H and C
+ * are updated based on the low-byte addition SP(low) + e.
+ */
+void OP_0b11101000(void);
+
 #endif
