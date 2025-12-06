@@ -614,4 +614,14 @@ void OP_0b11xx0101(void);
  */
 void OP_0b11000110(void);
 
+/*
+ * 0b11xxx111: RST n
+ *
+ * Performs an implicit call to a fixed restart vector n. The lower three
+ * bits xxx of the opcode select one of eight vectors spaced 0x08 bytes
+ * apart, so n ∈ {0x00, 0x08, 0x10, 0x18, 0x20, 0x28, 0x30, 0x38}. The
+ * return address is pushed onto the stack before control transfers to n.
+ */
+void OP_0b11xxx111(void);
+
 #endif

@@ -943,3 +943,17 @@ void OP_0b11000110(void)
     gb_proc.registers.r8.a = result;
     gb_proc.cycles += 2;
 }
+
+void OP_0b11xxx111(void)
+{
+    uint16_t ret = gb_proc.pc;
+
+    gb_proc.registers.r16.sp--;
+    mem_write(gb_proc.registers.r16.sp, (uint8_t)(ret >> 8));
+    gb_proc.registers.r16.sp--;
+    mem_write(gb_proc.registers.r16.sp, (uint8_t)ret);
+
+    gb_proc.pc = (uint16_t)(gb_proc.opcode & 0x38u);
+
+    gb_proc.cycles += 4;
+}
