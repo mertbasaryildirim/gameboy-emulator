@@ -780,4 +780,12 @@ void OP_0b11110110(void);
  */
 void OP_0b11111000(void);
 
+/*
+ * 0b11111010 / 0xFA: LD A, (nn)
+ *
+ * Loads the 8-bit value from the absolute address specified by the 16-bit
+ * immediate operand nn into register A. Flags are not affected.
+ */
+void OP_0b11111010(void);
+
 #endif
