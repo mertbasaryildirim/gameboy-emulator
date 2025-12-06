@@ -684,4 +684,12 @@ void OP_0b11011110(void);
  */
 void OP_0b11100000(void);
 
+/*
+ * 0b11100010 / 0xE2: LDH (C), A
+ *
+ * Stores the value of register A into memory at address 0xFF00 + C, where
+ * C is the 8-bit register C (low byte of BC).
+ */
+void OP_0b11100010(void);
+
 #endif
