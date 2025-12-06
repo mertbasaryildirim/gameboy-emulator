@@ -1207,3 +1207,9 @@ void OP_0b11111010(void)
 
     gb_proc.cycles += 4;
 }
+
+void OP_0b11111011(void)
+{
+    gb_proc.ime = 1;
+    gb_proc.cycles += 1;
+}
