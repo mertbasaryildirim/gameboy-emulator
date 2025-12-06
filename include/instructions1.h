@@ -760,4 +760,13 @@ void OP_0b11110010(void);
  */
 void OP_0b11110011(void);
 
+/*
+ * 0b11110110 / 0xF6: OR n
+ *
+ * Performs a bitwise OR between register A and the 8-bit immediate
+ * operand n, and stores the result back in A. Sets Z if the result is
+ * zero, and clears the N, H and C flags.
+ */
+void OP_0b11110110(void);
+
 #endif
