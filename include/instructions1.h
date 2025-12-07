@@ -252,6 +252,24 @@ void OP_0b00101111(void);
 void OP_0b00110010(void);
 
 /*
+ * 0b00110100: INC (HL)
+ *
+ * Increments the 8-bit value stored at the memory address pointed to by HL.
+ * Z is set if the result is zero, H is set on carry from bit 3, N is cleared,
+ * and C is left unchanged. Duration: 3 machine cycles.
+ */
+void OP_0b00110100(void);
+
+/*
+ * 0b00110101: DEC (HL)
+ *
+ * Decrements the 8-bit value stored at the memory address pointed to by HL.
+ * Z is set if the result is zero, H is set on borrow from bit 4, N is set,
+ * and C is left unchanged. Duration: 3 machine cycles.
+ */
+void OP_0b00110101(void);
+
+/*
  * 0b00110110 / 0x36: LD (HL),n
  *
  * Loads the 8-bit immediate value n into the memory location addressed by HL.
@@ -292,7 +310,7 @@ void OP_0b00111111(void);
  * and LD (HL),r instructions. Flags are not affected. Duration: 1 machine
  * cycle.
  */
-void OP_0b01xxxxyy(void);
+void OP_0b01xxxyyy(void);
 
 /*
  * 0b01xxx110: LD r,(HL)

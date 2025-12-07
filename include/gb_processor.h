@@ -38,6 +38,7 @@ typedef struct
 
     uint8_t opcode;
     uint16_t pc;
+    uint8_t ime_enable_pending;
     uint8_t ime;
     uint8_t halted;
     uint8_t stopped;
