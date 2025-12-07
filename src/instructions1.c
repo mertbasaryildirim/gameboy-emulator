@@ -392,6 +392,50 @@ void OP_0b00110010(void)
     gb_proc.cycles += 2;
 }
 
+void OP_0b00110100(void)
+{
+    uint16_t addr = gb_proc.registers.r16.hl;
+    uint8_t value = mem_read(addr);
+    uint8_t result = (uint8_t)(value + 1);
+
+    if (result == 0)
+        GB_FLAG_SET(GB_FLAG_Z);
+    else
+        GB_FLAG_CLEAR(GB_FLAG_Z);
+
+    GB_FLAG_CLEAR(GB_FLAG_N);
+
+    if ((value & 0x0F) == 0x0F)
+        GB_FLAG_SET(GB_FLAG_H);
+    else
+        GB_FLAG_CLEAR(GB_FLAG_H);
+
+    mem_write(addr, result);
+    gb_proc.cycles += 3;
+}
+
+void OP_0b00110101(void)
+{
+    uint16_t addr = gb_proc.registers.r16.hl;
+    uint8_t value = mem_read(addr);
+    uint8_t result = (uint8_t)(value - 1);
+
+    if (result == 0)
+        GB_FLAG_SET(GB_FLAG_Z);
+    else
+        GB_FLAG_CLEAR(GB_FLAG_Z);
+
+    GB_FLAG_SET(GB_FLAG_N);
+
+    if ((value & 0x0F) == 0x00)
+        GB_FLAG_SET(GB_FLAG_H);
+    else
+        GB_FLAG_CLEAR(GB_FLAG_H);
+
+    mem_write(addr, result);
+    gb_proc.cycles += 3;
+}
+
 void OP_0b00110110(void)
 {
     uint8_t n = mem_read(++gb_proc.pc);
@@ -430,7 +474,7 @@ void OP_0b00111111(void)
     gb_proc.cycles += 1;
 }
 
-void OP_0b01xxxxyy(void)
+void OP_0b01xxxyyy(void)
 {
     uint8_t dst_idx = (gb_proc.opcode >> 3) & 0x07u;
     uint8_t src_idx = gb_proc.opcode & 0x07u;
@@ -792,7 +836,9 @@ void OP_0b110xx000(void)
     {
         uint8_t lo = mem_read(gb_proc.registers.r16.sp++);
         uint8_t hi = mem_read(gb_proc.registers.r16.sp++);
-        gb_proc.pc = (uint16_t)((uint16_t)lo | ((uint16_t)hi << 8));
+        uint16_t ret = (uint16_t)lo | ((uint16_t)hi << 8);
+
+        gb_proc.pc = (uint16_t)(ret - 1u);
         gb_proc.cycles += 5;
     }
     else
@@ -946,14 +992,15 @@ void OP_0b11000110(void)
 
 void OP_0b11xxx111(void)
 {
-    uint16_t ret = gb_proc.pc;
+    uint16_t ret = (uint16_t)(gb_proc.pc + 1u);
 
     gb_proc.registers.r16.sp--;
     mem_write(gb_proc.registers.r16.sp, (uint8_t)(ret >> 8));
     gb_proc.registers.r16.sp--;
     mem_write(gb_proc.registers.r16.sp, (uint8_t)ret);
 
-    gb_proc.pc = (uint16_t)(gb_proc.opcode & 0x38u);
+    uint16_t vec = (uint16_t)(gb_proc.opcode & 0x38u);
+    gb_proc.pc = (uint16_t)(vec - 1u);
 
     gb_proc.cycles += 4;
 }
@@ -962,28 +1009,34 @@ void OP_0b11001001(void)
 {
     uint8_t lsb = mem_read(gb_proc.registers.r16.sp++);
     uint8_t msb = mem_read(gb_proc.registers.r16.sp++);
-    gb_proc.pc = (uint16_t)lsb | ((uint16_t)msb << 8);
+    uint16_t ret = (uint16_t)lsb | ((uint16_t)msb << 8);
+
+    gb_proc.pc = (uint16_t)(ret - 1u);
     gb_proc.cycles += 4;
 }
 
 void OP_0b11001101(void)
 {
-    uint8_t lsb = mem_read(gb_proc.pc++);
-    uint8_t msb = mem_read(gb_proc.pc++);
+    uint8_t lsb = mem_read(++gb_proc.pc);
+    uint8_t msb = mem_read(++gb_proc.pc);
     uint16_t nn = (uint16_t)lsb | ((uint16_t)msb << 8);
 
-    uint16_t ret = gb_proc.pc;
+    uint16_t ret = (uint16_t)(gb_proc.pc + 1u);
 
-    mem_write(--gb_proc.registers.r16.sp, (uint8_t)(ret >> 8));
-    mem_write(--gb_proc.registers.r16.sp, (uint8_t)(ret & 0xFFu));
+    uint16_t sp = gb_proc.registers.r16.sp;
+    sp--;
+    mem_write(sp, (uint8_t)(ret >> 8));
+    sp--;
+    mem_write(sp, (uint8_t)(ret & 0xFFu));
+    gb_proc.registers.r16.sp = sp;
 
-    gb_proc.pc = nn;
+    gb_proc.pc = (uint16_t)(nn - 1u);
     gb_proc.cycles += 6;
 }
 
 void OP_0b11001110(void)
 {
-    uint8_t n = mem_read(gb_proc.pc++);
+    uint8_t n = mem_read(++gb_proc.pc);
     uint8_t a = gb_proc.registers.r8.a;
     uint8_t carry_in = GB_FLAG_IS_SET(GB_FLAG_C) ? 1u : 0u;
 
@@ -1006,7 +1059,7 @@ void OP_0b11001110(void)
 
 void OP_0b11010110(void)
 {
-    uint8_t n = mem_read(gb_proc.pc++);
+    uint8_t n = mem_read(++gb_proc.pc);
     alu_sub(n);
     gb_proc.cycles += 2;
 }
@@ -1015,14 +1068,16 @@ void OP_0b11011001(void)
 {
     uint8_t lsb = mem_read(gb_proc.registers.r16.sp++);
     uint8_t msb = mem_read(gb_proc.registers.r16.sp++);
-    gb_proc.pc = (uint16_t)lsb | ((uint16_t)msb << 8);
+    uint16_t ret = (uint16_t)lsb | ((uint16_t)msb << 8);
+
+    gb_proc.pc = (uint16_t)(ret - 1u);
     gb_proc.ime = 1;
     gb_proc.cycles += 4;
 }
 
 void OP_0b11011110(void)
 {
-    uint8_t n = mem_read(gb_proc.pc++);
+    uint8_t n = mem_read(++gb_proc.pc);
     uint8_t a = gb_proc.registers.r8.a;
     uint8_t carry = GB_FLAG_IS_SET(GB_FLAG_C) ? 1u : 0u;
 
@@ -1048,7 +1103,7 @@ void OP_0b11011110(void)
 
 void OP_0b11100000(void)
 {
-    uint8_t n = mem_read(gb_proc.pc++);
+    uint8_t n = mem_read(++gb_proc.pc);
     uint16_t addr = (uint16_t)0xFF00u | (uint16_t)n;
     mem_write(addr, gb_proc.registers.r8.a);
     gb_proc.cycles += 3;
@@ -1063,7 +1118,7 @@ void OP_0b11100010(void)
 
 void OP_0b11100110(void)
 {
-    uint8_t n = mem_read(gb_proc.pc++);
+    uint8_t n = mem_read(++gb_proc.pc);
     uint8_t result = gb_proc.registers.r8.a & n;
     gb_proc.registers.r8.a = result;
 
@@ -1080,7 +1135,7 @@ void OP_0b11100110(void)
 
 void OP_0b11101000(void)
 {
-    uint8_t e = mem_read(gb_proc.pc++);
+    uint8_t e = mem_read(++gb_proc.pc);
     int8_t se = (int8_t)e;
 
     uint16_t sp = gb_proc.registers.r16.sp;
@@ -1102,14 +1157,14 @@ void OP_0b11101000(void)
 
 void OP_0b11101001(void)
 {
-    gb_proc.pc = gb_proc.registers.r16.hl;
+    gb_proc.pc = (uint16_t)(gb_proc.registers.r16.hl - 1u);
     gb_proc.cycles += 1;
 }
 
 void OP_0b11101010(void)
 {
-    uint8_t lsb = mem_read(gb_proc.pc++);
-    uint8_t msb = mem_read(gb_proc.pc++);
+    uint8_t lsb = mem_read(++gb_proc.pc);
+    uint8_t msb = mem_read(++gb_proc.pc);
     uint16_t addr = (uint16_t)lsb | ((uint16_t)msb << 8);
 
     mem_write(addr, gb_proc.registers.r8.a);
@@ -1119,7 +1174,7 @@ void OP_0b11101010(void)
 
 void OP_0b11101110(void)
 {
-    uint8_t n = mem_read(gb_proc.pc++);
+    uint8_t n = mem_read(++gb_proc.pc);
     uint8_t result = (uint8_t)(gb_proc.registers.r8.a ^ n);
 
     gb_proc.registers.r8.a = result;
@@ -1136,8 +1191,8 @@ void OP_0b11101110(void)
 
 void OP_0b11110000(void)
 {
-    uint8_t n = mem_read(gb_proc.pc++);
-    uint16_t addr = (uint16_t)0xFF00u | n;
+    uint8_t n = mem_read(++gb_proc.pc);
+    uint16_t addr = (uint16_t)0xFF00u | (uint16_t)n;
 
     gb_proc.registers.r8.a = mem_read(addr);
 
@@ -1154,12 +1209,13 @@ void OP_0b11110010(void)
 void OP_0b11110011(void)
 {
     gb_proc.ime = 0;
+    gb_proc.ime_enable_pending = 0;
     gb_proc.cycles += 1;
 }
 
 void OP_0b11110110(void)
 {
-    uint8_t n = mem_read(gb_proc.pc++);
+    uint8_t n = mem_read(++gb_proc.pc);
     uint8_t result = (uint8_t)(gb_proc.registers.r8.a | n);
 
     gb_proc.registers.r8.a = result;
@@ -1177,7 +1233,7 @@ void OP_0b11110110(void)
 void OP_0b11111000(void)
 {
     uint16_t sp = gb_proc.registers.r16.sp;
-    int8_t e = (int8_t)mem_read(gb_proc.pc++);
+    int8_t e = (int8_t)mem_read(++gb_proc.pc);
 
     uint16_t result = (uint16_t)(sp + e);
     gb_proc.registers.r16.hl = result;
@@ -1199,8 +1255,8 @@ void OP_0b11111000(void)
 
 void OP_0b11111010(void)
 {
-    uint8_t lsb = mem_read(gb_proc.pc++);
-    uint8_t msb = mem_read(gb_proc.pc++);
+    uint8_t lsb = mem_read(++gb_proc.pc);
+    uint8_t msb = mem_read(++gb_proc.pc);
     uint16_t addr = (uint16_t)lsb | ((uint16_t)msb << 8);
 
     gb_proc.registers.r8.a = mem_read(addr);
@@ -1210,6 +1266,6 @@ void OP_0b11111010(void)
 
 void OP_0b11111011(void)
 {
-    gb_proc.ime = 1;
+    gb_proc.ime_enable_pending = 1;
     gb_proc.cycles += 1;
 }
