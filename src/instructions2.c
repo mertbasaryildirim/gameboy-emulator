@@ -1,0 +1,39 @@
+#include "gb_processor.h"
+#include "gb_memory.h"
+#include "instructions2.h"
+
+static uint8_t *const reg8_table[8] = {
+    &gb_proc.registers.r8.b,
+    &gb_proc.registers.r8.c,
+    &gb_proc.registers.r8.d,
+    &gb_proc.registers.r8.e,
+    &gb_proc.registers.r8.h,
+    &gb_proc.registers.r8.l,
+    NULL,
+    &gb_proc.registers.r8.a};
+
+void OP_CB_0b00000xxx(void)
+{
+    uint8_t r_index = gb_proc.opcode & 0x07u;
+    uint8_t *reg = reg8_table[r_index];
+    if (!reg)
+        return;
+
+    uint8_t value = *reg;
+    uint8_t bit7 = (value & 0x80u) ? 1u : 0u;
+    uint8_t result = (uint8_t)((value << 1) | bit7);
+
+    *reg = result;
+
+    if (result == 0u)
+        GB_FLAG_SET(GB_FLAG_Z);
+    else
+        GB_FLAG_CLEAR(GB_FLAG_Z);
+
+    GB_FLAG_CLEAR(GB_FLAG_N | GB_FLAG_H | GB_FLAG_C);
+
+    if (bit7)
+        GB_FLAG_SET(GB_FLAG_C);
+
+    gb_proc.cycles += 2;
+}
