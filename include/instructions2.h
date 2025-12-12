@@ -108,3 +108,12 @@ void OP_CB_0b00100110(void);
  * to the original bit 0. Duration: 2 machine cycles.
  */
 void OP_CB_0b00101xxx(void);
+
+/*
+ * CB 0b00101110: SRA (HL)
+ *
+ * Same operation as SRA r but applied to the byte at address HL instead of
+ * a register. Z, N, H, and C are affected as in SRA r. Duration: 4 machine
+ * cycles.
+ */
+void OP_CB_0b00101110(void);
