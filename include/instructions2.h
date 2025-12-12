@@ -88,3 +88,12 @@ void OP_CB_0b00011110(void);
  * original bit 7. Duration: 2 machine cycles.
  */
 void OP_CB_0b00100xxx(void);
+
+/*
+ * CB 0b00100110: SLA (HL)
+ *
+ * Same operation as SLA r but applied to the byte at address HL instead of
+ * a register. Z, N, H, and C are affected as in SLA r. Duration: 4 machine
+ * cycles.
+ */
+void OP_CB_0b00100110(void);
