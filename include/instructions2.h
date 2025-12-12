@@ -48,3 +48,12 @@ void OP_CB_0b00001110(void);
  * original bit 7. Duration: 2 machine cycles.
  */
 void OP_CB_0b00010xxx(void);
+
+/*
+ * CB 0b00010110: RL (HL)
+ *
+ * Same operation as RL r but applied to the byte at address HL instead of a
+ * register. Z, N, H, and C are affected as in RL r. Duration: 4 machine
+ * cycles.
+ */
+void OP_CB_0b00010110(void);

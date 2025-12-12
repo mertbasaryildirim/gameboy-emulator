@@ -136,3 +136,27 @@ void OP_CB_0b00010xxx(void)
 
     gb_proc.cycles += 2;
 }
+
+void OP_CB_0b00010110(void)
+{
+    uint16_t addr = gb_proc.registers.r16.hl;
+    uint8_t value = mem_read(addr);
+
+    uint8_t old_c = GB_FLAG_IS_SET(GB_FLAG_C) ? 1u : 0u;
+    uint8_t new_c = (value & 0x80u) ? 1u : 0u;
+    uint8_t result = (uint8_t)((value << 1) | old_c);
+
+    mem_write(addr, result);
+
+    if (result == 0u)
+        GB_FLAG_SET(GB_FLAG_Z);
+    else
+        GB_FLAG_CLEAR(GB_FLAG_Z);
+
+    GB_FLAG_CLEAR(GB_FLAG_N | GB_FLAG_H | GB_FLAG_C);
+
+    if (new_c)
+        GB_FLAG_SET(GB_FLAG_C);
+
+    gb_proc.cycles += 4;
+}
