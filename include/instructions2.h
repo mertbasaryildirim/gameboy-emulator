@@ -28,3 +28,12 @@ void OP_CB_0b00000110(void);
  * 2 machine cycles.
  */
 void OP_CB_0b00001xxx(void);
+
+/*
+ * CB 0b00001110: RRC (HL)
+ *
+ * Same operation as RRC r but applied to the byte at address HL instead of
+ * a register. Z, N, H, and C are affected as in RRC r. Duration: 4 machine
+ * cycles.
+ */
+void OP_CB_0b00001110(void);
