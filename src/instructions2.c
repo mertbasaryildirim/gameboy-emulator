@@ -60,3 +60,29 @@ void OP_CB_0b00000110(void)
 
     gb_proc.cycles += 4;
 }
+
+void OP_CB_0b00001xxx(void)
+{
+    uint8_t r_index = gb_proc.opcode & 0x07u;
+    uint8_t *reg = reg8_table[r_index];
+    if (!reg)
+        return;
+
+    uint8_t value = *reg;
+    uint8_t bit0 = value & 0x01u;
+    uint8_t result = (uint8_t)((value >> 1) | (uint8_t)(bit0 << 7));
+
+    *reg = result;
+
+    if (result == 0u)
+        GB_FLAG_SET(GB_FLAG_Z);
+    else
+        GB_FLAG_CLEAR(GB_FLAG_Z);
+
+    GB_FLAG_CLEAR(GB_FLAG_N | GB_FLAG_H | GB_FLAG_C);
+
+    if (bit0)
+        GB_FLAG_SET(GB_FLAG_C);
+
+    gb_proc.cycles += 2;
+}

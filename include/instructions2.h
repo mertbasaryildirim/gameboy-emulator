@@ -17,3 +17,14 @@ void OP_CB_0b00000xxx(void);
  * cycles.
  */
 void OP_CB_0b00000110(void);
+
+/*
+ * CB 0b00001xxx: RRC r
+ *
+ * Rotates the selected 8-bit register right in a circular manner. Bits xxx
+ * select B, C, D, E, H, L, or A (the (HL) form is handled separately). Bit 0
+ * is copied into bit 7 and the carry flag. Z is set if the result is zero,
+ * N and H are cleared, and C is set if the original bit 0 was 1. Duration:
+ * 2 machine cycles.
+ */
+void OP_CB_0b00001xxx(void);
