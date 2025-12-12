@@ -57,3 +57,14 @@ void OP_CB_0b00010xxx(void);
  * cycles.
  */
 void OP_CB_0b00010110(void);
+
+/*
+ * CB 0b00011xxx: RR r
+ *
+ * Rotates the selected 8-bit register right through the carry flag. Bits xxx
+ * select B, C, D, E, H, L, or A (the (HL) form is handled separately). Bit 0
+ * is copied into the carry flag and the previous carry is copied into bit 7.
+ * Z is set if the result is zero, N and H are cleared, and C is set to the
+ * original bit 0. Duration: 2 machine cycles.
+ */
+void OP_CB_0b00011xxx(void);
