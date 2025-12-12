@@ -97,3 +97,14 @@ void OP_CB_0b00100xxx(void);
  * cycles.
  */
 void OP_CB_0b00100110(void);
+
+/*
+ * CB 0b00101xxx: SRA r
+ *
+ * Shifts the selected 8-bit register right by one bit using an arithmetic
+ * shift. Bits xxx select B, C, D, E, H, L, or A (the (HL) form is handled
+ * separately). Bit 0 is shifted into the carry flag and bit 7 retains its
+ * value. Z is set if the result is zero, N and H are cleared, and C is set
+ * to the original bit 0. Duration: 2 machine cycles.
+ */
+void OP_CB_0b00101xxx(void);
