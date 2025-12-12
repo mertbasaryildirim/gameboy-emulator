@@ -8,3 +8,12 @@
  * 2 machine cycles.
  */
 void OP_CB_0b00000xxx(void);
+
+/*
+ * CB 0b00000110: RLC (HL)
+ *
+ * Same operation as RLC r but applied to the byte at address HL instead of
+ * a register. Z, N, H, and C are affected as in RLC r. Duration: 4 machine
+ * cycles.
+ */
+void OP_CB_0b00000110(void);
