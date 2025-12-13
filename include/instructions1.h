@@ -799,6 +799,14 @@ void OP_0b11110110(void);
 void OP_0b11111000(void);
 
 /*
+ * 0b11111001 / 0xF9: LD SP,HL
+ *
+ * Loads the 16-bit HL register value into the stack pointer SP. Flags are
+ * not affected. Duration: 2 machine cycles.
+ */
+void OP_0b11111001(void);
+
+/*
  * 0b11111010 / 0xFA: LD A, (nn)
  *
  * Loads the 8-bit value from the absolute address specified by the 16-bit
