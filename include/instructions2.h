@@ -136,3 +136,14 @@ void OP_CB_0b00110xxx(void);
  * cycles.
  */
 void OP_CB_0b00110110(void);
+
+/*
+ * CB 0b00111xxx: SRL r
+ *
+ * Shifts the selected 8-bit register right by one bit using a logical shift.
+ * Bits xxx select B, C, D, E, H, L, or A (the (HL) form is handled separately).
+ * Bit 0 is shifted into the carry flag and bit 7 is set to 0. Z is set if the
+ * result is zero, N and H are cleared, and C is set to the original bit 0.
+ * Duration: 2 machine cycles.
+ */
+void OP_CB_0b00111xxx(void);
