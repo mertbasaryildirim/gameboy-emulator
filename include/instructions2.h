@@ -147,3 +147,12 @@ void OP_CB_0b00110110(void);
  * Duration: 2 machine cycles.
  */
 void OP_CB_0b00111xxx(void);
+
+/*
+ * CB 0b00111110: SRL (HL)
+ *
+ * Same operation as SRL r but applied to the byte at address HL instead of
+ * a register. Z, N, H, and C are affected as in SRL r. Duration: 4 machine
+ * cycles.
+ */
+void OP_CB_0b00111110(void);
