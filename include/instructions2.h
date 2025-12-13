@@ -167,3 +167,12 @@ void OP_CB_0b00111110(void);
  * unchanged. Duration: 2 machine cycles.
  */
 void OP_CB_0b01xxxyyy(void);
+
+/*
+ * CB 0b01xxx110: BIT b, (HL)
+ *
+ * Same test as BIT b, r but applied to the byte at address HL instead of a
+ * register. Z, N, H, and C are affected as in BIT b, r. Duration: 3 machine
+ * cycles.
+ */
+void OP_CB_0b01xxx110(void);
