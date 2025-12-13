@@ -156,3 +156,14 @@ void OP_CB_0b00111xxx(void);
  * cycles.
  */
 void OP_CB_0b00111110(void);
+
+/*
+ * CB 0b01xxxyyy: BIT b, r
+ *
+ * Tests bit b of the selected 8-bit register and updates flags without
+ * modifying the register. Bits xxx select the bit index b (0–7) and bits
+ * yyy select B, C, D, E, H, L, or A (the (HL) form is handled separately).
+ * Z is set if the tested bit is 0, N is cleared, H is set, and C is
+ * unchanged. Duration: 2 machine cycles.
+ */
+void OP_CB_0b01xxxyyy(void);
