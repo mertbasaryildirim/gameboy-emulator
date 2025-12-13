@@ -1253,6 +1253,12 @@ void OP_0b11111000(void)
     gb_proc.cycles += 3;
 }
 
+void OP_0b11111001(void)
+{
+    gb_proc.registers.r16.sp = gb_proc.registers.r16.hl;
+    gb_proc.cycles += 2;
+}
+
 void OP_0b11111010(void)
 {
     uint8_t lsb = mem_read(++gb_proc.pc);
