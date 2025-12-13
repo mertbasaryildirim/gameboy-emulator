@@ -1,4 +1,5 @@
 #include "instructions1.h"
+#include "instruction_table2.h"
 #include "gb_processor.h"
 #include "gb_memory.h"
 
@@ -1013,6 +1014,16 @@ void OP_0b11001001(void)
 
     gb_proc.pc = (uint16_t)(ret - 1u);
     gb_proc.cycles += 4;
+}
+
+void OP_0b11001011(void)
+{
+    uint8_t cb_opcode = mem_read(++gb_proc.pc);
+    gb_proc.opcode = cb_opcode;
+
+    instruction2_handler_t handler = instruction2_get_handler(cb_opcode);
+    if (handler)
+        handler();
 }
 
 void OP_0b11001101(void)
