@@ -185,3 +185,11 @@ void OP_CB_0b01xxx110(void);
  * handled separately). Flags are not affected. Duration: 2 machine cycles.
  */
 void OP_CB_0b10xxxyyy(void);
+
+/*
+ * CB 0b10xxx110: RES b, (HL)
+ *
+ * Same operation as RES b, r but applied to the byte at address HL instead of
+ * a register. Flags are not affected. Duration: 4 machine cycles.
+ */
+void OP_CB_0b10xxx110(void);
