@@ -1,4 +1,5 @@
 #include "gb_memory.h"
+#include "gb_timer.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -511,7 +512,7 @@ void mem_write(uint16_t addr, uint8_t value)
 
     if (addr == 0xFF04u)
     {
-        gb.mem[0xFF04u] = 0u;
+        gb_timer_div_reset();
         return;
     }
 
