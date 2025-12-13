@@ -1,12 +1,6 @@
 #include "instruction_table1.h"
 #include "instructions1.h"
 
-/*
- * We use C99 designated initializers.
- * Any entry not explicitly initialized would be 0 (NULL), but for clarity
- * all undefined / unimplemented opcodes are explicitly set to NULL.
- */
-
 const instruction1_handler_t instruction_table1[256] = {
     /* 0x00–0x0F */
     [0x00] = OP_0b00000000, /* NOP */
@@ -246,7 +240,7 @@ const instruction1_handler_t instruction_table1[256] = {
     [0xD0] = OP_0b110xx000, /* RET NC */
     [0xD1] = OP_0b11xx0001, /* POP DE */
     [0xD2] = OP_0b110xx010, /* JP NC,nn */
-    [0xD3] = NULL,          /* Undefined on SM83. */
+    [0xD3] = NULL,          /* Undefined */
     [0xD4] = OP_0b110xx100, /* CALL NC,nn */
     [0xD5] = OP_0b11xx0101, /* PUSH DE */
     [0xD6] = OP_0b11010110, /* SUB n */
@@ -254,9 +248,9 @@ const instruction1_handler_t instruction_table1[256] = {
     [0xD8] = OP_0b110xx000, /* RET C */
     [0xD9] = OP_0b11011001, /* RETI */
     [0xDA] = OP_0b110xx010, /* JP C,nn */
-    [0xDB] = NULL,          /* Undefined. */
+    [0xDB] = NULL,          /* Undefined */
     [0xDC] = OP_0b110xx100, /* CALL C,nn */
-    [0xDD] = NULL,          /* Undefined. */
+    [0xDD] = NULL,          /* Undefined */
     [0xDE] = OP_0b11011110, /* SBC n */
     [0xDF] = OP_0b11xxx111, /* RST 18h */
 
@@ -264,17 +258,17 @@ const instruction1_handler_t instruction_table1[256] = {
     [0xE0] = OP_0b11100000, /* LDH (n),A */
     [0xE1] = OP_0b11xx0001, /* POP HL */
     [0xE2] = OP_0b11100010, /* LDH (C),A */
-    [0xE3] = NULL,          /* Undefined. */
-    [0xE4] = NULL,          /* Undefined. */
+    [0xE3] = NULL,          /* Undefined */
+    [0xE4] = NULL,          /* Undefined */
     [0xE5] = OP_0b11xx0101, /* PUSH HL */
     [0xE6] = OP_0b11100110, /* AND n */
     [0xE7] = OP_0b11xxx111, /* RST 20h */
     [0xE8] = OP_0b11101000, /* ADD SP,e */
     [0xE9] = OP_0b11101001, /* JP HL */
     [0xEA] = OP_0b11101010, /* LD (nn),A */
-    [0xEB] = NULL,          /* Undefined. */
-    [0xEC] = NULL,          /* Undefined. */
-    [0xED] = NULL,          /* Undefined. */
+    [0xEB] = NULL,          /* Undefined */
+    [0xEC] = NULL,          /* Undefined */
+    [0xED] = NULL,          /* Undefined */
     [0xEE] = OP_0b11101110, /* XOR n */
     [0xEF] = OP_0b11xxx111, /* RST 28h */
 
@@ -283,7 +277,7 @@ const instruction1_handler_t instruction_table1[256] = {
     [0xF1] = OP_0b11xx0001, /* POP AF */
     [0xF2] = OP_0b11110010, /* LDH A,(C) */
     [0xF3] = OP_0b11110011, /* DI */
-    [0xF4] = NULL,          /* Undefined. */
+    [0xF4] = NULL,          /* Undefined */
     [0xF5] = OP_0b11xx0101, /* PUSH AF */
     [0xF6] = OP_0b11110110, /* OR n */
     [0xF7] = OP_0b11xxx111, /* RST 30h */
@@ -291,8 +285,8 @@ const instruction1_handler_t instruction_table1[256] = {
     [0xF9] = NULL,          /* LD SP,HL – valid on SM83 but not implemented (no prototype). */
     [0xFA] = OP_0b11111010, /* LD A,(nn) */
     [0xFB] = OP_0b11111011, /* EI */
-    [0xFC] = NULL,          /* Undefined. */
-    [0xFD] = NULL,          /* Undefined. */
+    [0xFC] = NULL,          /* Undefined */
+    [0xFD] = NULL,          /* Undefined */
     [0xFE] = NULL,          /* CP n – valid but not implemented in this file. */
     [0xFF] = OP_0b11xxx111, /* RST 38h */
 };

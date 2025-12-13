@@ -1,13 +1,6 @@
 #include "instruction_table2.h"
 #include "instructions2.h"
 
-/*
- * CB-prefixed opcode dispatch table.
- *
- * We use C99 designated initializers. All CB opcodes on the SM83 are
- * defined, so every entry is mapped to a valid handler.
- */
-
 const instruction2_handler_t instruction_table2[256] = {
     /* 0x00–0x0F : RLC / RRC */
     [0x00] = OP_CB_0b00000xxx, /* RLC B */
