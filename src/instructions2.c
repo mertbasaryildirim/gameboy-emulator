@@ -435,3 +435,20 @@ void OP_CB_0b01xxxyyy(void)
 
     gb_proc.cycles += 2;
 }
+
+void OP_CB_0b01xxx110(void)
+{
+    uint8_t bit_index = cb_bit_index(gb_proc.opcode);
+    uint8_t value = mem_read(gb_proc.registers.r16.hl);
+    uint8_t mask = (uint8_t)(1u << bit_index);
+
+    if ((value & mask) == 0u)
+        GB_FLAG_SET(GB_FLAG_Z);
+    else
+        GB_FLAG_CLEAR(GB_FLAG_Z);
+
+    GB_FLAG_CLEAR(GB_FLAG_N);
+    GB_FLAG_SET(GB_FLAG_H);
+
+    gb_proc.cycles += 3;
+}
