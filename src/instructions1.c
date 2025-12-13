@@ -1275,3 +1275,22 @@ void OP_0b11111011(void)
     gb_proc.ime_enable_pending = 1;
     gb_proc.cycles += 1;
 }
+
+void OP_0b11111110(void)
+{
+    uint8_t n = mem_read(++gb_proc.pc);
+    uint8_t a = gb_proc.registers.r8.a;
+    uint8_t res = (uint8_t)(a - n);
+
+    GB_FLAG_SET(GB_FLAG_N);
+    GB_FLAG_CLEAR(GB_FLAG_Z | GB_FLAG_H | GB_FLAG_C);
+
+    if (res == 0u)
+        GB_FLAG_SET(GB_FLAG_Z);
+    if ((a & 0x0Fu) < (n & 0x0Fu))
+        GB_FLAG_SET(GB_FLAG_H);
+    if (a < n)
+        GB_FLAG_SET(GB_FLAG_C);
+
+    gb_proc.cycles += 2;
+}
