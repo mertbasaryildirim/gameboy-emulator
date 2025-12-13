@@ -127,3 +127,12 @@ void OP_CB_0b00101110(void);
  * Duration: 2 machine cycles.
  */
 void OP_CB_0b00110xxx(void);
+
+/*
+ * CB 0b00110110: SWAP (HL)
+ *
+ * Same operation as SWAP r but applied to the byte at address HL instead of
+ * a register. Z, N, H, and C are affected as in SWAP r. Duration: 4 machine
+ * cycles.
+ */
+void OP_CB_0b00110110(void);
