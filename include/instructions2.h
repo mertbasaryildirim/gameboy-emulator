@@ -202,3 +202,11 @@ void OP_CB_0b10xxx110(void);
  * handled separately). Flags are not affected. Duration: 2 machine cycles.
  */
 void OP_CB_0b11xxxyyy(void);
+
+/*
+ * CB 0b11xxx110: SET b, (HL)
+ *
+ * Same operation as SET b, r but applied to the byte at address HL instead of
+ * a register. Flags are not affected. Duration: 4 machine cycles.
+ */
+void OP_CB_0b11xxx110(void);
