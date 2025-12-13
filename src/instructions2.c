@@ -331,3 +331,22 @@ void OP_CB_0b00110xxx(void)
 
     gb_proc.cycles += 2;
 }
+
+void OP_CB_0b00110110(void)
+{
+    uint16_t addr = gb_proc.registers.r16.hl;
+    uint8_t value = mem_read(addr);
+
+    uint8_t result = (uint8_t)((value >> 4) | (value << 4));
+
+    mem_write(addr, result);
+
+    if (result == 0u)
+        GB_FLAG_SET(GB_FLAG_Z);
+    else
+        GB_FLAG_CLEAR(GB_FLAG_Z);
+
+    GB_FLAG_CLEAR(GB_FLAG_N | GB_FLAG_H | GB_FLAG_C);
+
+    gb_proc.cycles += 4;
+}
