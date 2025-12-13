@@ -4,6 +4,13 @@
 #include <stdint.h>
 #include <stddef.h>
 
+typedef enum
+{
+    GB_MBC_NONE = 0,
+    GB_MBC_MBC1 = 1,
+    GB_MBC_UNKNOWN = 0xFF
+} GB_MBC_TYPE;
+
 typedef struct
 {
     uint8_t mem[0x10000];
@@ -16,12 +23,23 @@ typedef struct
 
     uint8_t *cart_ram;
     size_t cart_ram_size;
+
+    uint8_t cart_type;
+    GB_MBC_TYPE mbc_type;
+    uint8_t rom_bank_count;
+    uint8_t ram_bank_count;
+
+    uint8_t rom_bank_low5;
+    uint8_t rom_bank_high2;
+    uint8_t ram_bank;
+    uint8_t ram_enabled;
+    uint8_t banking_mode;
 } GB_MEMORY;
 
 extern GB_MEMORY gb;
 
-void memory_init();
-void memory_reset();
+void memory_init(void);
+void memory_reset(void);
 
 uint8_t mem_read(uint16_t addr);
 void mem_write(uint16_t addr, uint8_t value);

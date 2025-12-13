@@ -27,6 +27,7 @@
 #define IO_WY gb.mem[0xFF4A]
 #define IO_WX gb.mem[0xFF4B]
 
+#define IO_BOOT gb.mem[0xFF50]
 #define IO_IE gb.mem[0xFFFF]
 
 #endif
