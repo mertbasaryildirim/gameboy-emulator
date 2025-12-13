@@ -651,6 +651,15 @@ void OP_0b11xxx111(void);
 void OP_0b11001001(void);
 
 /*
+ * 0b11001011 / 0xCB: CB prefix
+ *
+ * Treats the following byte as an extended opcode and dispatches it through
+ * the CB-prefixed instruction table. The CB-prefixed handler is responsible
+ * for cycle accounting; this prefix instruction itself does not modify flags.
+ */
+void OP_0b11001011(void);
+
+/*
  * 0b11001101 / 0xCD: CALL nn
  *
  * Pushes the return address (the address of the next instruction) onto the
