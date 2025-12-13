@@ -14,6 +14,13 @@
 #define GB_FLAG_CLEAR(mask) (gb_proc.registers.r8.f &= (uint8_t)~(mask))
 #define GB_FLAG_IS_SET(mask) ((gb_proc.registers.r8.f & (uint8_t)(mask)) != 0)
 
+/* Interrupt bits (IF/IE) */
+#define GB_INT_VBLANK 0x01u
+#define GB_INT_STAT 0x02u
+#define GB_INT_TIMER 0x04u
+#define GB_INT_SERIAL 0x08u
+#define GB_INT_JOYPAD 0x10u
+
 typedef struct
 {
     union
@@ -42,10 +49,15 @@ typedef struct
     uint8_t ime;
     uint8_t halted;
     uint8_t stopped;
+    uint8_t halt_bug;
     uint64_t cycles;
 
 } GB_PROC;
 
 extern GB_PROC gb_proc;
+
+void gb_cpu_init(void);
+void gb_cpu_reset(void);
+void gb_cpu_step(void);
 
 #endif
