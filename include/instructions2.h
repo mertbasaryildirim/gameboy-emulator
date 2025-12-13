@@ -193,3 +193,12 @@ void OP_CB_0b10xxxyyy(void);
  * a register. Flags are not affected. Duration: 4 machine cycles.
  */
 void OP_CB_0b10xxx110(void);
+
+/*
+ * CB 0b11xxxyyy: SET b, r
+ *
+ * Sets bit b of the selected 8-bit register to 1. Bits xxx select the bit
+ * index b (0–7) and bits yyy select B, C, D, E, H, L, or A (the (HL) form is
+ * handled separately). Flags are not affected. Duration: 2 machine cycles.
+ */
+void OP_CB_0b11xxxyyy(void);
