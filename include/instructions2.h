@@ -117,3 +117,13 @@ void OP_CB_0b00101xxx(void);
  * cycles.
  */
 void OP_CB_0b00101110(void);
+
+/*
+ * CB 0b00110xxx: SWAP r
+ *
+ * Swaps the high and low 4-bit nibbles of the selected 8-bit register. Bits
+ * xxx select B, C, D, E, H, L, or A (the (HL) form is handled separately).
+ * Z is set if the result is zero, N and H are cleared, and C is cleared.
+ * Duration: 2 machine cycles.
+ */
+void OP_CB_0b00110xxx(void);
