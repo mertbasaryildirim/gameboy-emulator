@@ -19,12 +19,27 @@ static GB_MBC_TYPE detect_mbc_type(uint8_t cart_type)
     case 0x03:
         return GB_MBC_MBC1;
 
+    case 0x0F:
+    case 0x10:
+    case 0x11:
+    case 0x12:
+    case 0x13:
+        return GB_MBC_MBC3;
+
+    case 0x19:
+    case 0x1A:
+    case 0x1B:
+    case 0x1C:
+    case 0x1D:
+    case 0x1E:
+        return GB_MBC_MBC5;
+
     default:
         return GB_MBC_UNKNOWN;
     }
 }
 
-static uint8_t rom_bank_count_from_header(uint8_t code)
+static uint16_t rom_bank_count_from_header(uint8_t code)
 {
     switch (code)
     {
@@ -55,7 +70,7 @@ static uint8_t rom_bank_count_from_header(uint8_t code)
     }
 }
 
-static uint8_t ram_banks_from_header(uint8_t code)
+static uint16_t ram_banks_from_header(uint8_t code)
 {
     switch (code)
     {
@@ -69,6 +84,8 @@ static uint8_t ram_banks_from_header(uint8_t code)
         return 4u;
     case 0x04:
         return 16u;
+    case 0x05:
+        return 8u;
     default:
         return 0u;
     }
@@ -95,8 +112,8 @@ static uint8_t rom_read(uint16_t addr)
         if (addr < 0x4000u)
         {
             bank = 0u;
-            if (gb.banking_mode == 1u)
-                bank = (uint8_t)(gb.rom_bank_high2 & 0x03u);
+            if (gb.mbc1_banking_mode == 1u)
+                bank = (uint8_t)(gb.mbc1_rom_bank_high2 & 0x03u);
 
             if (gb.rom_bank_count != 0u)
                 bank = (uint8_t)(bank % gb.rom_bank_count);
@@ -105,8 +122,8 @@ static uint8_t rom_read(uint16_t addr)
         }
         else
         {
-            uint8_t low = (uint8_t)(gb.rom_bank_low5 & 0x1Fu);
-            uint8_t high = gb.banking_mode == 0u ? (uint8_t)(gb.rom_bank_high2 & 0x03u) : 0u;
+            uint8_t low = (uint8_t)(gb.mbc1_rom_bank_low5 & 0x1Fu);
+            uint8_t high = gb.mbc1_banking_mode == 0u ? (uint8_t)(gb.mbc1_rom_bank_high2 & 0x03u) : 0u;
 
             bank = (uint8_t)(low | (uint8_t)(high << 5));
 
@@ -115,6 +132,60 @@ static uint8_t rom_read(uint16_t addr)
 
             if (gb.rom_bank_count != 0u)
                 bank = (uint8_t)(bank % gb.rom_bank_count);
+
+            offset = ((size_t)bank * 0x4000u) + (size_t)(addr - 0x4000u);
+        }
+
+        if (offset >= gb.cart_rom_size)
+            return 0xFFu;
+
+        return gb.cart_rom[offset];
+    }
+
+    if (gb.mbc_type == GB_MBC_MBC3)
+    {
+        uint8_t bank;
+        size_t offset;
+
+        if (addr < 0x4000u)
+        {
+            bank = 0u;
+            offset = (size_t)addr;
+        }
+        else
+        {
+            bank = (uint8_t)(gb.mbc3_rom_bank & 0x7Fu);
+            if (bank == 0u)
+                bank = 1u;
+
+            if (gb.rom_bank_count != 0u)
+                bank = (uint8_t)(bank % gb.rom_bank_count);
+
+            offset = ((size_t)bank * 0x4000u) + (size_t)(addr - 0x4000u);
+        }
+
+        if (offset >= gb.cart_rom_size)
+            return 0xFFu;
+
+        return gb.cart_rom[offset];
+    }
+
+    if (gb.mbc_type == GB_MBC_MBC5)
+    {
+        uint16_t bank;
+        size_t offset;
+
+        if (addr < 0x4000u)
+        {
+            bank = 0u;
+            offset = (size_t)addr;
+        }
+        else
+        {
+            bank = gb.mbc5_rom_bank;
+
+            if (gb.rom_bank_count != 0u)
+                bank = (uint16_t)(bank % gb.rom_bank_count);
 
             offset = ((size_t)bank * 0x4000u) + (size_t)(addr - 0x4000u);
         }
@@ -136,14 +207,14 @@ static uint8_t ram_read(uint16_t addr)
     if (!gb.cart_ram || gb.cart_ram_size == 0u)
         return 0xFFu;
 
+    if (!gb.ram_enabled)
+        return 0xFFu;
+
     if (gb.mbc_type == GB_MBC_MBC1)
     {
-        if (!gb.ram_enabled)
-            return 0xFFu;
-
         uint8_t bank = 0u;
-        if (gb.banking_mode == 1u)
-            bank = (uint8_t)(gb.ram_bank & 0x03u);
+        if (gb.mbc1_banking_mode == 1u)
+            bank = (uint8_t)(gb.mbc1_ram_bank & 0x03u);
 
         size_t offset = ((size_t)bank * 0x2000u) + (size_t)(addr - 0xA000u);
         if (offset >= gb.cart_ram_size)
@@ -151,13 +222,45 @@ static uint8_t ram_read(uint16_t addr)
 
         return gb.cart_ram[offset];
     }
-    else
+
+    if (gb.mbc_type == GB_MBC_MBC3)
     {
-        size_t offset = (size_t)(addr - 0xA000u);
+        uint8_t sel = gb.mbc3_ram_rtc_select;
+
+        if (sel <= 0x03u)
+        {
+            uint8_t bank = (uint8_t)(sel & 0x03u);
+            size_t offset = ((size_t)bank * 0x2000u) + (size_t)(addr - 0xA000u);
+            if (offset >= gb.cart_ram_size)
+                return 0xFFu;
+            return gb.cart_ram[offset];
+        }
+        else if (sel >= 0x08u && sel <= 0x0Cu)
+        {
+            uint8_t index = (uint8_t)(sel - 0x08u);
+            if (index < 5u)
+                return gb.mbc3_rtc_regs[index];
+            return 0xFFu;
+        }
+
+        return 0xFFu;
+    }
+
+    if (gb.mbc_type == GB_MBC_MBC5)
+    {
+        uint8_t bank = (uint8_t)(gb.mbc5_ram_bank & 0x0Fu);
+
+        size_t offset = ((size_t)bank * 0x2000u) + (size_t)(addr - 0xA000u);
         if (offset >= gb.cart_ram_size)
             return 0xFFu;
+
         return gb.cart_ram[offset];
     }
+
+    size_t offset = (size_t)(addr - 0xA000u);
+    if (offset >= gb.cart_ram_size)
+        return 0xFFu;
+    return gb.cart_ram[offset];
 }
 
 static void ram_write(uint16_t addr, uint8_t value)
@@ -165,29 +268,63 @@ static void ram_write(uint16_t addr, uint8_t value)
     if (!gb.cart_ram || gb.cart_ram_size == 0u)
         return;
 
+    if (!gb.ram_enabled)
+        return;
+
     if (gb.mbc_type == GB_MBC_MBC1)
     {
-        if (!gb.ram_enabled)
-            return;
-
         uint8_t bank = 0u;
-        if (gb.banking_mode == 1u)
-            bank = (uint8_t)(gb.ram_bank & 0x03u);
+        if (gb.mbc1_banking_mode == 1u)
+            bank = (uint8_t)(gb.mbc1_ram_bank & 0x03u);
 
         size_t offset = ((size_t)bank * 0x2000u) + (size_t)(addr - 0xA000u);
         if (offset >= gb.cart_ram_size)
             return;
 
         gb.cart_ram[offset] = value;
+        return;
     }
-    else
+
+    if (gb.mbc_type == GB_MBC_MBC3)
     {
-        size_t offset = (size_t)(addr - 0xA000u);
+        uint8_t sel = gb.mbc3_ram_rtc_select;
+
+        if (sel <= 0x03u)
+        {
+            uint8_t bank = (uint8_t)(sel & 0x03u);
+            size_t offset = ((size_t)bank * 0x2000u) + (size_t)(addr - 0xA000u);
+            if (offset >= gb.cart_ram_size)
+                return;
+            gb.cart_ram[offset] = value;
+            return;
+        }
+        else if (sel >= 0x08u && sel <= 0x0Cu)
+        {
+            uint8_t index = (uint8_t)(sel - 0x08u);
+            if (index < 5u)
+                gb.mbc3_rtc_regs[index] = value;
+            return;
+        }
+
+        return;
+    }
+
+    if (gb.mbc_type == GB_MBC_MBC5)
+    {
+        uint8_t bank = (uint8_t)(gb.mbc5_ram_bank & 0x0Fu);
+        size_t offset = ((size_t)bank * 0x2000u) + (size_t)(addr - 0xA000u);
         if (offset >= gb.cart_ram_size)
             return;
 
         gb.cart_ram[offset] = value;
+        return;
     }
+
+    size_t offset = (size_t)(addr - 0xA000u);
+    if (offset >= gb.cart_ram_size)
+        return;
+
+    gb.cart_ram[offset] = value;
 }
 
 static void mbc_handle_rom_write(uint16_t addr, uint8_t value)
@@ -203,19 +340,70 @@ static void mbc_handle_rom_write(uint16_t addr, uint8_t value)
         }
         else if (addr <= 0x3FFFu)
         {
-            gb.rom_bank_low5 = (uint8_t)(value & 0x1Fu);
-            if ((gb.rom_bank_low5 & 0x1Fu) == 0u)
-                gb.rom_bank_low5 = 1u;
+            gb.mbc1_rom_bank_low5 = (uint8_t)(value & 0x1Fu);
+            if ((gb.mbc1_rom_bank_low5 & 0x1Fu) == 0u)
+                gb.mbc1_rom_bank_low5 = 1u;
         }
         else if (addr <= 0x5FFFu)
         {
             uint8_t v = (uint8_t)(value & 0x03u);
-            gb.rom_bank_high2 = v;
-            gb.ram_bank = v;
+            gb.mbc1_rom_bank_high2 = v;
+            gb.mbc1_ram_bank = v;
         }
         else if (addr <= 0x7FFFu)
         {
-            gb.banking_mode = (uint8_t)(value & 0x01u);
+            gb.mbc1_banking_mode = (uint8_t)(value & 0x01u);
+        }
+    }
+    else if (gb.mbc_type == GB_MBC_MBC3)
+    {
+        if (addr <= 0x1FFFu)
+        {
+            gb.ram_enabled = (uint8_t)(((value & 0x0Fu) == 0x0Au) ? 1u : 0u);
+        }
+        else if (addr <= 0x3FFFu)
+        {
+            gb.mbc3_rom_bank = (uint8_t)(value & 0x7Fu);
+            if (gb.mbc3_rom_bank == 0u)
+                gb.mbc3_rom_bank = 1u;
+        }
+        else if (addr <= 0x5FFFu)
+        {
+            gb.mbc3_ram_rtc_select = value;
+        }
+        else if (addr <= 0x7FFFu)
+        {
+            uint8_t new_latch = (uint8_t)(value & 0x01u);
+            if (gb.mbc3_rtc_latch_state == 0u && new_latch == 1u)
+            {
+                for (uint8_t i = 0; i < 5u; ++i)
+                    gb.mbc3_rtc_latched_regs[i] = gb.mbc3_rtc_regs[i];
+            }
+            gb.mbc3_rtc_latch_state = new_latch;
+        }
+    }
+    else if (gb.mbc_type == GB_MBC_MBC5)
+    {
+        if (addr <= 0x1FFFu)
+        {
+            gb.ram_enabled = (uint8_t)(((value & 0x0Fu) == 0x0Au) ? 1u : 0u);
+        }
+        else if (addr <= 0x2FFFu)
+        {
+            uint16_t lower = (uint16_t)value;
+            gb.mbc5_rom_bank = (uint16_t)((gb.mbc5_rom_bank & 0x0100u) | lower);
+        }
+        else if (addr <= 0x3FFFu)
+        {
+            uint16_t upper = (uint16_t)(value & 0x01u);
+            gb.mbc5_rom_bank = (uint16_t)(((upper << 8) & 0x0100u) | (gb.mbc5_rom_bank & 0x00FFu));
+        }
+        else if (addr <= 0x5FFFu)
+        {
+            gb.mbc5_ram_bank = (uint8_t)(value & 0x0Fu);
+        }
+        else if (addr <= 0x7FFFu)
+        {
         }
     }
 }
@@ -234,8 +422,22 @@ void memory_init(void)
     gb.boot_rom_enabled = 1u;
     gb.mbc_type = GB_MBC_NONE;
     gb.rom_bank_count = 2u;
-    gb.rom_bank_low5 = 1u;
+    gb.ram_bank_count = 0u;
     gb.ram_enabled = 0u;
+
+    gb.mbc1_rom_bank_low5 = 1u;
+    gb.mbc1_rom_bank_high2 = 0u;
+    gb.mbc1_ram_bank = 0u;
+    gb.mbc1_banking_mode = 0u;
+
+    gb.mbc3_rom_bank = 1u;
+    gb.mbc3_ram_rtc_select = 0u;
+    gb.mbc3_rtc_latch_state = 0u;
+    memset(gb.mbc3_rtc_regs, 0, sizeof(gb.mbc3_rtc_regs));
+    memset(gb.mbc3_rtc_latched_regs, 0, sizeof(gb.mbc3_rtc_latched_regs));
+
+    gb.mbc5_rom_bank = 1u;
+    gb.mbc5_ram_bank = 0u;
 }
 
 void memory_reset(void)
@@ -243,10 +445,19 @@ void memory_reset(void)
     memset(gb.mem, 0, sizeof(gb.mem));
     gb.boot_rom_enabled = 1u;
 
-    gb.rom_bank_low5 = 1u;
-    gb.rom_bank_high2 = 0u;
-    gb.ram_bank = 0u;
-    gb.banking_mode = 0u;
+    gb.mbc1_rom_bank_low5 = 1u;
+    gb.mbc1_rom_bank_high2 = 0u;
+    gb.mbc1_ram_bank = 0u;
+    gb.mbc1_banking_mode = 0u;
+
+    gb.mbc3_rom_bank = 1u;
+    gb.mbc3_ram_rtc_select = 0u;
+    gb.mbc3_rtc_latch_state = 0u;
+    memset(gb.mbc3_rtc_regs, 0, sizeof(gb.mbc3_rtc_regs));
+    memset(gb.mbc3_rtc_latched_regs, 0, sizeof(gb.mbc3_rtc_latched_regs));
+
+    gb.mbc5_rom_bank = 1u;
+    gb.mbc5_ram_bank = 0u;
 
     if (gb.mbc_type == GB_MBC_NONE)
         gb.ram_enabled = 1u;
@@ -406,11 +617,25 @@ void load_cartridge(const char *path)
             gb.ram_bank_count = 0u;
         }
     }
+    else
+    {
+        gb.cart_ram = NULL;
+        gb.cart_ram_size = 0u;
+    }
 
-    gb.rom_bank_low5 = 1u;
-    gb.rom_bank_high2 = 0u;
-    gb.ram_bank = 0u;
-    gb.banking_mode = 0u;
+    gb.mbc1_rom_bank_low5 = 1u;
+    gb.mbc1_rom_bank_high2 = 0u;
+    gb.mbc1_ram_bank = 0u;
+    gb.mbc1_banking_mode = 0u;
+
+    gb.mbc3_rom_bank = 1u;
+    gb.mbc3_ram_rtc_select = 0u;
+    gb.mbc3_rtc_latch_state = 0u;
+    memset(gb.mbc3_rtc_regs, 0, sizeof(gb.mbc3_rtc_regs));
+    memset(gb.mbc3_rtc_latched_regs, 0, sizeof(gb.mbc3_rtc_latched_regs));
+
+    gb.mbc5_rom_bank = 1u;
+    gb.mbc5_ram_bank = 0u;
 
     if (gb.mbc_type == GB_MBC_NONE)
         gb.ram_enabled = 1u;
