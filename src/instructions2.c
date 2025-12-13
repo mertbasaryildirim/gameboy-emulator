@@ -493,3 +493,16 @@ void OP_CB_0b11xxxyyy(void)
 
     gb_proc.cycles += 2;
 }
+
+void OP_CB_0b11xxx110(void)
+{
+    uint16_t addr = gb_proc.registers.r16.hl;
+    uint8_t value = mem_read(addr);
+    uint8_t bit_index = cb_bit_index(gb_proc.opcode);
+    uint8_t mask = (uint8_t)(1u << bit_index);
+
+    value |= mask;
+    mem_write(addr, value);
+
+    gb_proc.cycles += 4;
+}
