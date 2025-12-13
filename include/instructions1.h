@@ -823,4 +823,16 @@ void OP_0b11111010(void);
  */
 void OP_0b11111011(void);
 
+/*
+ * 0b11111110 / 0xFE: CP n
+ *
+ * Compares the 8-bit immediate value n with register A by computing A - n
+ * and updating the flags based on the result, without modifying A.
+ *
+ * Z is set if the subtraction result is zero. N is set. H is set if there
+ * is a borrow from bit 4. C is set if there is a borrow from bit 7.
+ * Duration: 2 machine cycles.
+ */
+void OP_0b11111110(void);
+
 #endif
