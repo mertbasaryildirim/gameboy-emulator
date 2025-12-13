@@ -479,3 +479,17 @@ void OP_CB_0b10xxx110(void)
 
     gb_proc.cycles += 4;
 }
+
+void OP_CB_0b11xxxyyy(void)
+{
+    uint8_t r_index = cb_reg_index(gb_proc.opcode);
+    uint8_t bit_index = cb_bit_index(gb_proc.opcode);
+    uint8_t *reg = reg8_table[r_index];
+    if (!reg)
+        return;
+
+    uint8_t mask = (uint8_t)(1u << bit_index);
+    *reg |= mask;
+
+    gb_proc.cycles += 2;
+}
