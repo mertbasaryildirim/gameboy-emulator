@@ -12,6 +12,20 @@ static uint8_t *const reg8_table[8] = {
     NULL,
     &gb_proc.registers.r8.a};
 
+static const uint8_t cb_bit_base_table[4] = {0u, 2u, 4u, 6u};
+
+static inline uint8_t cb_reg_index(uint8_t opcode)
+{
+    return opcode & 0x07u;
+}
+
+static inline uint8_t cb_bit_index(uint8_t opcode)
+{
+    uint8_t folded_row = (opcode >> 4) & 0x03u;
+    uint8_t half = (opcode >> 3) & 0x01u;
+    return (uint8_t)(cb_bit_base_table[folded_row] + half);
+}
+
 void OP_CB_0b00000xxx(void)
 {
     uint8_t r_index = gb_proc.opcode & 0x07u;
@@ -398,4 +412,26 @@ void OP_CB_0b00111110(void)
         GB_FLAG_SET(GB_FLAG_C);
 
     gb_proc.cycles += 4;
+}
+
+void OP_CB_0b01xxxyyy(void)
+{
+    uint8_t r_index = cb_reg_index(gb_proc.opcode);
+    uint8_t bit_index = cb_bit_index(gb_proc.opcode);
+    uint8_t *reg = reg8_table[r_index];
+    if (!reg)
+        return;
+
+    uint8_t value = *reg;
+    uint8_t mask = (uint8_t)(1u << bit_index);
+
+    if ((value & mask) == 0u)
+        GB_FLAG_SET(GB_FLAG_Z);
+    else
+        GB_FLAG_CLEAR(GB_FLAG_Z);
+
+    GB_FLAG_CLEAR(GB_FLAG_N);
+    GB_FLAG_SET(GB_FLAG_H);
+
+    gb_proc.cycles += 2;
 }
