@@ -176,3 +176,12 @@ void OP_CB_0b01xxxyyy(void);
  * cycles.
  */
 void OP_CB_0b01xxx110(void);
+
+/*
+ * CB 0b10xxxyyy: RES b, r
+ *
+ * Resets bit b of the selected 8-bit register to 0. Bits xxx select the bit
+ * index b (0–7) and bits yyy select B, C, D, E, H, L, or A (the (HL) form is
+ * handled separately). Flags are not affected. Duration: 2 machine cycles.
+ */
+void OP_CB_0b10xxxyyy(void);
