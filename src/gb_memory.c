@@ -1,6 +1,7 @@
 #include "gb_memory.h"
 #include "gb_timer.h"
 #include "gb_joypad.h"
+#include "gb_apu.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -490,6 +491,9 @@ uint8_t mem_read(uint16_t addr)
     if (addr == 0xFF00u)
         return gb_joypad_read();
 
+    if ((addr >= 0xFF10u && addr <= 0xFF3Fu) || (addr >= 0xFF24u && addr <= 0xFF26u))
+        return gb_apu_read(addr);
+
     if (addr < 0x8000u)
         return rom_read(addr);
 
@@ -532,6 +536,12 @@ void mem_write(uint16_t addr, uint8_t value)
     if (addr == 0xFF00u)
     {
         gb_joypad_write(value);
+        return;
+    }
+
+    if ((addr >= 0xFF10u && addr <= 0xFF3Fu) || (addr >= 0xFF24u && addr <= 0xFF26u))
+    {
+        gb_apu_write(addr, value);
         return;
     }
 
