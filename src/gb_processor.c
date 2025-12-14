@@ -6,6 +6,7 @@
 #include "instruction_table1.h"
 #include "gb_timer.h"
 #include "gb_ppu.h"
+#include "gb_apu.h"
 
 GB_PROC gb_proc;
 
@@ -47,6 +48,7 @@ static void cpu_handle_interrupt(uint8_t bit, uint16_t vector)
     gb_proc.cycles += 5u;
     gb_timer_step(5u);
     gb_ppu_step(5u);
+    gb_apu_step(5u);
 }
 
 static uint8_t cpu_handle_interrupts(void)
@@ -126,6 +128,7 @@ void gb_cpu_step(void)
         gb_proc.cycles += 1u;
         gb_timer_step(1u);
         gb_ppu_step(1u);
+        gb_apu_step(1u);
         return;
     }
 
@@ -134,6 +137,7 @@ void gb_cpu_step(void)
         gb_proc.cycles += 1u;
         gb_timer_step(1u);
         gb_ppu_step(1u);
+        gb_apu_step(1u);
         return;
     }
 
@@ -149,6 +153,7 @@ void gb_cpu_step(void)
             uint8_t delta = (uint8_t)(gb_proc.cycles - old_cycles);
             gb_timer_step(delta);
             gb_ppu_step(delta);
+            gb_apu_step(delta);
         }
     }
     else
@@ -156,5 +161,6 @@ void gb_cpu_step(void)
         gb_proc.cycles += 1u;
         gb_timer_step(1u);
         gb_ppu_step(1u);
+        gb_apu_step(1u);
     }
 }

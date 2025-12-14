@@ -4,8 +4,10 @@
 #include "gb_processor.h"
 #include "gb_timer.h"
 #include "gb_ppu.h"
+#include "gb_apu.h"
 #include "display_manager.h"
 #include "gb_debug.h"
+#include "audio_manager.h"
 
 int main(int argc, char *argv[])
 {
@@ -22,10 +24,22 @@ int main(int argc, char *argv[])
     gb_cpu_init();
     gb_timer_init();
     gb_ppu_init();
-    gb_debug_init();
 
-    if (dm_init("Game Boy Emulator", 4) != 0)
-        return 1;
+    {
+        int sample_rate = 44100;
+        gb_apu_init(sample_rate);
+
+        if (dm_init("Game Boy Emulator", 4) != 0)
+            return 1;
+
+        if (audio_init(sample_rate) != 0)
+        {
+            dm_shutdown();
+            return 1;
+        }
+    }
+
+    gb_debug_init();
 
     {
         int running = 1;
@@ -56,6 +70,7 @@ int main(int argc, char *argv[])
         }
     }
 
+    audio_shutdown();
     dm_shutdown();
     return 0;
 }

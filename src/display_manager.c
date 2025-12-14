@@ -13,7 +13,7 @@ static SDL_GameController *dm_controller = NULL;
 
 int dm_init(const char *title, int scale)
 {
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_GAMECONTROLLER) != 0)
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_GAMECONTROLLER | SDL_INIT_AUDIO) != 0)
     {
         printf("SDL_Init failed: %s\n", SDL_GetError());
         return 1;
