@@ -5,6 +5,7 @@
 #include "gb_timer.h"
 #include "gb_ppu.h"
 #include "display_manager.h"
+#include "gb_debug.h"
 
 int main(int argc, char *argv[])
 {
@@ -21,6 +22,7 @@ int main(int argc, char *argv[])
     gb_cpu_init();
     gb_timer_init();
     gb_ppu_init();
+    gb_debug_init();
 
     if (dm_init("Game Boy Emulator", 4) != 0)
         return 1;
@@ -43,15 +45,14 @@ int main(int argc, char *argv[])
                 gb_cpu_step();
 
                 if (!dm_handle_events())
-                {
                     running = 0;
-                }
             }
 
             if (!running)
                 break;
 
             dm_present(gb_ppu.framebuffer);
+            gb_debug_frame();
         }
     }
 
