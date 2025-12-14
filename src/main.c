@@ -1,7 +1,60 @@
 #include <stdio.h>
 
-int main()
+#include "gb_memory.h"
+#include "gb_processor.h"
+#include "gb_timer.h"
+#include "gb_ppu.h"
+#include "display_manager.h"
+
+int main(int argc, char *argv[])
 {
-    printf("Hello World");
+    if (argc < 3)
+    {
+        printf("Usage: %s <boot_rom.bin> <game_rom.gb>\n", argv[0]);
+        return 1;
+    }
+
+    memory_init();
+    load_boot_rom(argv[1]);
+    load_cartridge(argv[2]);
+
+    gb_cpu_init();
+    gb_timer_init();
+    gb_ppu_init();
+
+    if (dm_init("Game Boy Emulator", 4) != 0)
+        return 1;
+
+    {
+        int running = 1;
+
+        while (running)
+        {
+            if (!dm_handle_events())
+            {
+                running = 0;
+                break;
+            }
+
+            gb_ppu_clear_frame_complete();
+
+            while (!gb_ppu.frame_complete && running)
+            {
+                gb_cpu_step();
+
+                if (!dm_handle_events())
+                {
+                    running = 0;
+                }
+            }
+
+            if (!running)
+                break;
+
+            dm_present(gb_ppu.framebuffer);
+        }
+    }
+
+    dm_shutdown();
     return 0;
 }
