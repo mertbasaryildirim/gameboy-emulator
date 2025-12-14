@@ -1,5 +1,6 @@
 #include "gb_memory.h"
 #include "gb_timer.h"
+#include "gb_joypad.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -450,6 +451,8 @@ void memory_init(void)
 
     gb.mbc5_rom_bank = 1u;
     gb.mbc5_ram_bank = 0u;
+
+    gb_joypad_init();
 }
 
 void memory_reset(void)
@@ -475,12 +478,17 @@ void memory_reset(void)
         gb.ram_enabled = 1u;
     else
         gb.ram_enabled = 0u;
+
+    gb_joypad_reset();
 }
 
 uint8_t mem_read(uint16_t addr)
 {
     if (gb.boot_rom_enabled && addr < 0x0100u)
         return gb.boot_rom[addr];
+
+    if (addr == 0xFF00u)
+        return gb_joypad_read();
 
     if (addr < 0x8000u)
         return rom_read(addr);
@@ -520,6 +528,12 @@ void mem_write(uint16_t addr, uint8_t value)
 
     if (addr >= 0xFEA0u && addr <= 0xFEFFu)
         return;
+
+    if (addr == 0xFF00u)
+    {
+        gb_joypad_write(value);
+        return;
+    }
 
     if (addr == 0xFF04u)
     {
