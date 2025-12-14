@@ -197,10 +197,12 @@ static uint8_t rom_read(uint16_t addr)
         return gb.cart_rom[offset];
     }
 
-    size_t index = (size_t)addr;
-    if (index >= gb.cart_rom_size)
-        return 0xFFu;
-    return gb.cart_rom[index];
+    {
+        size_t index = (size_t)addr;
+        if (index >= gb.cart_rom_size)
+            return 0xFFu;
+        return gb.cart_rom[index];
+    }
 }
 
 static uint8_t ram_read(uint16_t addr)
@@ -217,11 +219,13 @@ static uint8_t ram_read(uint16_t addr)
         if (gb.mbc1_banking_mode == 1u)
             bank = (uint8_t)(gb.mbc1_ram_bank & 0x03u);
 
-        size_t offset = ((size_t)bank * 0x2000u) + (size_t)(addr - 0xA000u);
-        if (offset >= gb.cart_ram_size)
-            return 0xFFu;
+        {
+            size_t offset = ((size_t)bank * 0x2000u) + (size_t)(addr - 0xA000u);
+            if (offset >= gb.cart_ram_size)
+                return 0xFFu;
 
-        return gb.cart_ram[offset];
+            return gb.cart_ram[offset];
+        }
     }
 
     if (gb.mbc_type == GB_MBC_MBC3)
@@ -250,7 +254,6 @@ static uint8_t ram_read(uint16_t addr)
     if (gb.mbc_type == GB_MBC_MBC5)
     {
         uint8_t bank = (uint8_t)(gb.mbc5_ram_bank & 0x0Fu);
-
         size_t offset = ((size_t)bank * 0x2000u) + (size_t)(addr - 0xA000u);
         if (offset >= gb.cart_ram_size)
             return 0xFFu;
@@ -258,10 +261,12 @@ static uint8_t ram_read(uint16_t addr)
         return gb.cart_ram[offset];
     }
 
-    size_t offset = (size_t)(addr - 0xA000u);
-    if (offset >= gb.cart_ram_size)
-        return 0xFFu;
-    return gb.cart_ram[offset];
+    {
+        size_t offset = (size_t)(addr - 0xA000u);
+        if (offset >= gb.cart_ram_size)
+            return 0xFFu;
+        return gb.cart_ram[offset];
+    }
 }
 
 static void ram_write(uint16_t addr, uint8_t value)
@@ -278,12 +283,14 @@ static void ram_write(uint16_t addr, uint8_t value)
         if (gb.mbc1_banking_mode == 1u)
             bank = (uint8_t)(gb.mbc1_ram_bank & 0x03u);
 
-        size_t offset = ((size_t)bank * 0x2000u) + (size_t)(addr - 0xA000u);
-        if (offset >= gb.cart_ram_size)
-            return;
+        {
+            size_t offset = ((size_t)bank * 0x2000u) + (size_t)(addr - 0xA000u);
+            if (offset >= gb.cart_ram_size)
+                return;
 
-        gb.cart_ram[offset] = value;
-        return;
+            gb.cart_ram[offset] = value;
+            return;
+        }
     }
 
     if (gb.mbc_type == GB_MBC_MBC3)
@@ -321,11 +328,12 @@ static void ram_write(uint16_t addr, uint8_t value)
         return;
     }
 
-    size_t offset = (size_t)(addr - 0xA000u);
-    if (offset >= gb.cart_ram_size)
-        return;
-
-    gb.cart_ram[offset] = value;
+    {
+        size_t offset = (size_t)(addr - 0xA000u);
+        if (offset >= gb.cart_ram_size)
+            return;
+        gb.cart_ram[offset] = value;
+    }
 }
 
 static void mbc_handle_rom_write(uint16_t addr, uint8_t value)
@@ -377,7 +385,8 @@ static void mbc_handle_rom_write(uint16_t addr, uint8_t value)
             uint8_t new_latch = (uint8_t)(value & 0x01u);
             if (gb.mbc3_rtc_latch_state == 0u && new_latch == 1u)
             {
-                for (uint8_t i = 0; i < 5u; ++i)
+                uint8_t i;
+                for (i = 0; i < 5u; ++i)
                     gb.mbc3_rtc_latched_regs[i] = gb.mbc3_rtc_regs[i];
             }
             gb.mbc3_rtc_latch_state = new_latch;
@@ -412,14 +421,16 @@ static void mbc_handle_rom_write(uint16_t addr, uint8_t value)
 static void dma_transfer(uint8_t value)
 {
     uint16_t source = (uint16_t)((uint16_t)value << 8);
+    uint16_t i;
 
-    for (uint16_t i = 0; i < 0xA0u; ++i)
+    for (i = 0; i < 0xA0u; ++i)
         gb.mem[(uint16_t)(0xFE00u + i)] = mem_read((uint16_t)(source + i));
 }
 
 void memory_init(void)
 {
     memset(&gb, 0, sizeof(GB_MEMORY));
+
     gb.boot_rom_enabled = 1u;
     gb.mbc_type = GB_MBC_NONE;
     gb.rom_bank_count = 2u;
