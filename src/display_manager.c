@@ -4,14 +4,16 @@
 #include "display_manager.h"
 #include "gb_ppu.h"
 #include "gb_joypad.h"
+#include "gb_debug.h"
 
 static SDL_Window *dm_window = NULL;
 static SDL_Renderer *dm_renderer = NULL;
 static SDL_Texture *dm_texture = NULL;
+static SDL_GameController *dm_controller = NULL;
 
 int dm_init(const char *title, int scale)
 {
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0)
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_GAMECONTROLLER) != 0)
     {
         printf("SDL_Init failed: %s\n", SDL_GetError());
         return 1;
@@ -34,7 +36,9 @@ int dm_init(const char *title, int scale)
             return 1;
         }
 
-        dm_renderer = SDL_CreateRenderer(dm_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+        dm_renderer = SDL_CreateRenderer(dm_window,
+                                         -1,
+                                         SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
         if (!dm_renderer)
         {
             printf("SDL_CreateRenderer failed: %s\n", SDL_GetError());
@@ -61,11 +65,32 @@ int dm_init(const char *title, int scale)
         }
     }
 
+    {
+        int num = SDL_NumJoysticks();
+        int i;
+        for (i = 0; i < num; ++i)
+        {
+            if (SDL_IsGameController(i))
+            {
+                dm_controller = SDL_GameControllerOpen(i);
+                if (!dm_controller)
+                    printf("SDL_GameControllerOpen failed: %s\n", SDL_GetError());
+                break;
+            }
+        }
+    }
+
     return 0;
 }
 
 void dm_shutdown(void)
 {
+    if (dm_controller)
+    {
+        SDL_GameControllerClose(dm_controller);
+        dm_controller = NULL;
+    }
+
     if (dm_texture)
     {
         SDL_DestroyTexture(dm_texture);
@@ -119,6 +144,41 @@ static void dm_handle_key_event(const SDL_KeyboardEvent *key, uint8_t pressed)
     }
 }
 
+static void dm_handle_controller_button(const SDL_ControllerButtonEvent *btn, uint8_t pressed)
+{
+    SDL_GameControllerButton b = btn->button;
+
+    switch (b)
+    {
+    case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
+        gb_joypad_set_button(GB_JOY_RIGHT, pressed);
+        break;
+    case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
+        gb_joypad_set_button(GB_JOY_LEFT, pressed);
+        break;
+    case SDL_CONTROLLER_BUTTON_DPAD_UP:
+        gb_joypad_set_button(GB_JOY_UP, pressed);
+        break;
+    case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
+        gb_joypad_set_button(GB_JOY_DOWN, pressed);
+        break;
+    case SDL_CONTROLLER_BUTTON_A:
+        gb_joypad_set_button(GB_JOY_A, pressed);
+        break;
+    case SDL_CONTROLLER_BUTTON_B:
+        gb_joypad_set_button(GB_JOY_B, pressed);
+        break;
+    case SDL_CONTROLLER_BUTTON_BACK:
+        gb_joypad_set_button(GB_JOY_SELECT, pressed);
+        break;
+    case SDL_CONTROLLER_BUTTON_START:
+        gb_joypad_set_button(GB_JOY_START, pressed);
+        break;
+    default:
+        break;
+    }
+}
+
 int dm_handle_events(void)
 {
     SDL_Event ev;
@@ -132,11 +192,22 @@ int dm_handle_events(void)
             if (ev.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
                 return 0;
 
+            if (ev.key.keysym.scancode == SDL_SCANCODE_F1)
+                gb_debug_toggle();
+
             dm_handle_key_event(&ev.key, 1u);
         }
         else if (ev.type == SDL_KEYUP)
         {
             dm_handle_key_event(&ev.key, 0u);
+        }
+        else if (ev.type == SDL_CONTROLLERBUTTONDOWN)
+        {
+            dm_handle_controller_button(&ev.cbutton, 1u);
+        }
+        else if (ev.type == SDL_CONTROLLERBUTTONUP)
+        {
+            dm_handle_controller_button(&ev.cbutton, 0u);
         }
     }
     return 1;
